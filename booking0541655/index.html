@@ -2,7 +2,7 @@
 <html lang="zh-Hant">
 <head>
   <meta charset="utf-8">
- <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>醫療預約 App</title>
   <style>
     :root {
@@ -792,10 +792,10 @@
               </div>
               <div class="time-apply-actions">
                 <button class="time-apply-btn" type="button" id="directApplyDates"><span class="time-apply-icon"><svg viewBox="0 0 24 24"><path d="M8 2v4"></path><path d="M16 2v4"></path><rect x="3" y="4" width="18" height="18" rx="3"></rect><path d="m9 14 2 2 4-5"></path></svg></span><span>直接套用<small>立即套用此時段</small></span><span class="chevron"></span></button>
-                <button class="time-apply-btn" type="button" id="openApplyDateStep"><span class="time-apply-icon"><svg viewBox="0 0 24 24"><path d="M8 2v4"></path><path d="M16 2v4"></path><rect x="3" y="4" width="18" height="18" rx="3"></rect><circle cx="16" cy="16" r="4"></circle><path d="M16 14v2l1.5 1"></path></svg></span><span>套用其它日期<small>選擇日期後套用</small></span><span class="chevron"></span></button>
-                <button class="time-apply-btn" type="button" id="selectAllApplyDates"><span class="time-apply-icon"><svg viewBox="0 0 24 24"><path d="M8 2v4"></path><path d="M16 2v4"></path><rect x="3" y="4" width="18" height="18" rx="3"></rect><path d="M8 11h8"></path><path d="M8 15h8"></path></svg></span><span>套用星期<small>選擇星期後套用</small></span><span class="chevron"></span></button>
-                <button class="time-apply-btn" type="button" id="batchMonthApply"><span class="time-apply-icon"><svg viewBox="0 0 24 24"><path d="M8 2v4"></path><path d="M16 2v4"></path><rect x="3" y="4" width="18" height="18" rx="3"></rect><path d="M8 11h8"></path><path d="M12 15h4"></path><path d="M8 15h.01"></path></svg></span><span>套用月份<small>選擇月份後套用</small></span><span class="chevron"></span></button>
-                <button class="range-apply-btn" type="button" id="rangeApplyDates"><span class="time-apply-icon"><svg viewBox="0 0 24 24"><path d="M8 2v4"></path><path d="M16 2v4"></path><rect x="3" y="4" width="8" height="8" rx="2"></rect><rect x="13" y="10" width="8" height="8" rx="2"></rect><path d="M11 8h2"></path><path d="M11 14h2"></path></svg></span><span>套用日期範圍<small>選擇日期範圍後套用</small></span><span class="chevron"></span></button>
+                <button class="time-apply-btn" type="button" id="openApplyDateStep"><span class="time-apply-icon"><svg viewBox="0 0 24 24"><path d="M8 2v4"></path><path d="M16 2v4"></path><rect x="3" y="4" width="18" height="18" rx="3"></rect><circle cx="16" cy="16" r="4"></circle><path d="M16 14v2l1.5 1"></path></svg></span><span>選日期套用<small>選擇日期後套用</small></span><span class="chevron"></span></button>
+                <button class="time-apply-btn" type="button" id="selectAllApplyDates"><span class="time-apply-icon"><svg viewBox="0 0 24 24"><path d="M8 2v4"></path><path d="M16 2v4"></path><rect x="3" y="4" width="18" height="18" rx="3"></rect><path d="M8 11h8"></path><path d="M8 15h8"></path></svg></span><span>選星期套用<small>選擇星期後套用</small></span><span class="chevron"></span></button>
+                <button class="time-apply-btn" type="button" id="batchMonthApply"><span class="time-apply-icon"><svg viewBox="0 0 24 24"><path d="M8 2v4"></path><path d="M16 2v4"></path><rect x="3" y="4" width="18" height="18" rx="3"></rect><path d="M8 11h8"></path><path d="M12 15h4"></path><path d="M8 15h.01"></path></svg></span><span>選月份套用<small>選擇月份後套用</small></span><span class="chevron"></span></button>
+                <button class="range-apply-btn" type="button" id="rangeApplyDates"><span class="time-apply-icon"><svg viewBox="0 0 24 24"><path d="M8 2v4"></path><path d="M16 2v4"></path><rect x="3" y="4" width="8" height="8" rx="2"></rect><rect x="13" y="10" width="8" height="8" rx="2"></rect><path d="M11 8h2"></path><path d="M11 14h2"></path></svg></span><span>選日期範圍套用<small>選擇日期範圍後套用</small></span><span class="chevron"></span></button>
               </div>
             </div>
 
@@ -3355,19 +3355,9 @@
       setTimeout(() => button.classList.remove("is-flashing"), 180);
     }
 
-    function exitDayOffMode(restoreBackup = false) {
-      if (!cooperationRecordDraft || directApplyMode !== "dayOff") return;
-      if (restoreBackup && dayOffEditableTimesBackup) {
-        cooperationRecordDraft.editableTimes = dayOffEditableTimesBackup.map((slot) => ({ ...slot }));
-      }
-      dayOffEditableTimesBackup = null;
-      directApplyMode = "schedule";
-    }
-
     enableAllSlots.addEventListener("click", () => {
       if (!cooperationRecordDraft) return;
       flashToolbarButton(enableAllSlots);
-      exitDayOffMode();
       cooperationRecordDraft.editableTimes.forEach((slot) => {
         slot.enabled = true;
       });
@@ -3376,7 +3366,6 @@
     disableAllSlots.addEventListener("click", () => {
       if (!cooperationRecordDraft) return;
       flashToolbarButton(disableAllSlots);
-      exitDayOffMode();
       cooperationRecordDraft.editableTimes.forEach((slot) => {
         slot.enabled = false;
       });
@@ -3385,11 +3374,6 @@
     markTodayOff.addEventListener("click", () => {
       if (!cooperationRecordDraft) return;
       flashToolbarButton(markTodayOff);
-      if (directApplyMode === "dayOff") {
-        exitDayOffMode(true);
-        renderTimeEditor();
-        return;
-      }
       dayOffEditableTimesBackup = cooperationRecordDraft.editableTimes.map((slot) => ({ ...slot }));
       cooperationRecordDraft.editableTimes.forEach((slot) => {
         slot.enabled = false;
