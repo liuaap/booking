@@ -4,6 +4,7 @@
   <meta charset="utf-8">
  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>醫療預約 App</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIINfQ9V7ZL5n/8ZK3pC6kIVn9N2h+8Gq2M=" crossorigin="">
   <style>
     :root {
       --blue: #256fe6;
@@ -99,6 +100,450 @@
       margin-bottom: 14px;
     }
 
+    .location[role="button"] {
+      cursor: pointer;
+    }
+
+    .page[data-page="home"] .location-picker {
+      display: none;
+    }
+
+    .location-select-panel {
+      display: grid;
+      gap: 12px;
+      margin: -18px -18px 0;
+      padding: 12px 12px 0;
+      background: transparent;
+      border: 0;
+      box-shadow: none;
+    }
+
+    .location-select-panel .location-entry {
+      grid-template-columns: minmax(0, 1fr) 62px;
+      gap: 8px;
+      padding: 0 0 8px;
+      background: #eef5ff;
+    }
+
+    .location-select-panel .location-entry input {
+      height: 50px;
+      border-radius: 8px;
+      font-size: 15px;
+      background: #fff;
+      box-shadow: 0 2px 8px rgba(23, 43, 77, .08);
+    }
+
+    .location-select-panel .location-entry button {
+      height: 50px;
+      border-radius: 8px;
+      font-size: 15px;
+    }
+
+    .location-page-map {
+      height: calc(100vh - 178px);
+      min-height: 520px;
+      margin: 0 -12px;
+      border: 0;
+      border-radius: 0;
+      background:
+        radial-gradient(circle at 30% 40%, #ef4444 0 9px, transparent 10px),
+        radial-gradient(circle at 68% 26%, #256fe6 0 5px, #fff 6px 8px, transparent 9px),
+        radial-gradient(circle at 74% 70%, #36b87d 0 5px, #fff 6px 8px, transparent 9px),
+        radial-gradient(circle at 18% 82%, #8f75ff 0 5px, #fff 6px 8px, transparent 9px),
+        linear-gradient(34deg, transparent 0 43%, rgba(255,255,255,.95) 44% 48%, transparent 49%),
+        linear-gradient(156deg, transparent 0 36%, rgba(255,255,255,.95) 37% 40%, transparent 41%),
+        linear-gradient(82deg, transparent 0 58%, rgba(255,255,255,.9) 59% 62%, transparent 63%),
+        linear-gradient(138deg, rgba(130, 211, 226, .95) 0 28%, transparent 29%),
+        linear-gradient(155deg, transparent 0 54%, rgba(96, 191, 216, .95) 55% 69%, transparent 70%),
+        linear-gradient(120deg, #c9f0df 0%, #e7f6ee 42%, #cfeddc 100%);
+    }
+
+    .location-page-map::before {
+      left: -20px;
+      top: 50%;
+      width: 430px;
+      height: 18px;
+      background: rgba(255, 255, 255, .95);
+      box-shadow:
+        0 -86px 0 rgba(255, 255, 255, .86),
+        0 92px 0 rgba(255, 255, 255, .86);
+    }
+
+    .location-page-map::after {
+      right: -40px;
+      top: 36%;
+      width: 360px;
+      height: 10px;
+      background: rgba(37, 111, 230, .24);
+    }
+
+    .page[data-page="locationSelect"] {
+      padding: 12px 0 0;
+      background: #eef5ff;
+    }
+
+    .page[data-page="locationSelect"] .topbar,
+    .page[data-page="locationSelect"] .location-hint,
+    .page[data-page="locationSelect"] .location-select-panel > .primary-btn {
+      display: none;
+    }
+
+    .page[data-page="locationSelect"] .map-open-btn {
+      position: relative;
+      min-height: calc(100vh - 102px);
+      margin: -8px -12px 0;
+      overflow: hidden;
+      border: 0;
+      border-radius: 0;
+      display: block;
+      background:
+        radial-gradient(circle at var(--pin-x, 30%) var(--pin-y, 40%), #ef4444 0 9px, transparent 10px),
+        radial-gradient(circle at 68% 26%, #256fe6 0 5px, #fff 6px 8px, transparent 9px),
+        radial-gradient(circle at 74% 70%, #36b87d 0 5px, #fff 6px 8px, transparent 9px),
+        radial-gradient(circle at 18% 82%, #8f75ff 0 5px, #fff 6px 8px, transparent 9px),
+        linear-gradient(34deg, transparent 0 43%, rgba(255,255,255,.95) 44% 48%, transparent 49%),
+        linear-gradient(156deg, transparent 0 36%, rgba(255,255,255,.95) 37% 40%, transparent 41%),
+        linear-gradient(82deg, transparent 0 58%, rgba(255,255,255,.9) 59% 62%, transparent 63%),
+        linear-gradient(138deg, rgba(130, 211, 226, .95) 0 28%, transparent 29%),
+        linear-gradient(155deg, transparent 0 54%, rgba(96, 191, 216, .95) 55% 69%, transparent 70%),
+        linear-gradient(120deg, #c9f0df 0%, #e7f6ee 42%, #cfeddc 100%);
+      box-shadow: none;
+      cursor: crosshair;
+    }
+
+    .page[data-page="locationSelect"] .map-open-btn svg,
+    .page[data-page="locationSelect"] .map-open-btn span {
+      display: none;
+    }
+
+    .page[data-page="locationSelect"] .map-open-btn::before {
+      content: "";
+      position: absolute;
+      left: -20px;
+      top: 50%;
+      width: 430px;
+      height: 18px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, .95);
+      box-shadow:
+        0 -86px 0 rgba(255, 255, 255, .86),
+        0 92px 0 rgba(255, 255, 255, .86);
+      transform: rotate(-18deg);
+    }
+
+    .page[data-page="locationSelect"] .map-open-btn::after {
+      content: "";
+      position: absolute;
+      left: calc(var(--pin-x, 30%) - 9px);
+      top: calc(var(--pin-y, 40%) - 18px);
+      width: 18px;
+      height: 18px;
+      border: 3px solid #fff;
+      border-radius: 50% 50% 50% 0;
+      background: #ef4444;
+      box-shadow: 0 7px 16px rgba(20, 33, 61, .24);
+      transform: rotate(-45deg);
+    }
+
+    .page[data-page="locationSelect"] {
+      padding: 12px 12px 0;
+      background: #eef5ff;
+    }
+
+    .page[data-page="locationSelect"] .location-select-panel {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      gap: 8px;
+    }
+
+    .page[data-page="locationSelect"] .location-entry {
+      padding: 0;
+      background: transparent;
+    }
+
+    .page[data-page="locationSelect"] .map-open-btn {
+      min-height: 0;
+      height: calc(100% - 58px);
+      margin: 0 -12px;
+      background:
+        radial-gradient(circle at var(--pin-x, 30%) var(--pin-y, 42%), #ef4444 0 8px, #fff 9px 11px, transparent 12px),
+        radial-gradient(circle at 55% 28%, #256fe6 0 4px, #fff 5px 7px, transparent 8px),
+        radial-gradient(circle at 78% 70%, #36b87d 0 4px, #fff 5px 7px, transparent 8px),
+        radial-gradient(circle at 22% 80%, #8f75ff 0 4px, #fff 5px 7px, transparent 8px),
+        linear-gradient(22deg, transparent 0 48%, rgba(255,255,255,.92) 49% 52%, transparent 53%),
+        linear-gradient(105deg, transparent 0 34%, rgba(255,255,255,.94) 35% 38%, transparent 39%),
+        linear-gradient(158deg, transparent 0 62%, rgba(255,255,255,.90) 63% 66%, transparent 67%),
+        linear-gradient(150deg, rgba(124, 207, 222, .92) 0 24%, transparent 25%),
+        linear-gradient(25deg, transparent 0 60%, rgba(96, 191, 216, .9) 61% 78%, transparent 79%),
+        linear-gradient(120deg, #dff4e8 0%, #edf8f2 48%, #d4efdf 100%);
+    }
+
+    .page[data-page="locationSelect"] .map-open-btn::before {
+      left: -16%;
+      top: 54%;
+      width: 132%;
+      height: 10px;
+      box-shadow:
+        0 -74px 0 rgba(255,255,255,.84),
+        0 76px 0 rgba(255,255,255,.84);
+    }
+
+    .page[data-page="locationSelect"] .map-open-btn::after {
+      left: calc(var(--pin-x, 30%) - 8px);
+      top: calc(var(--pin-y, 42%) - 16px);
+      width: 16px;
+      height: 16px;
+      border-width: 3px;
+    }
+
+    .page[data-page="locationSelect"].active {
+      display: flex;
+      flex-direction: column;
+      padding: 12px 8px 0;
+      overflow: hidden;
+      background: #eef5ff;
+    }
+
+    .page[data-page="locationSelect"] .location-select-panel {
+      flex: 1 1 auto;
+      min-height: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin: 0;
+      padding: 0;
+    }
+
+    .page[data-page="locationSelect"] .location-entry {
+      flex: 0 0 auto;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 62px;
+      gap: 8px;
+      padding: 0;
+      background: transparent;
+      position: relative;
+      z-index: 700;
+    }
+
+    .page[data-page="locationSelect"] .location-entry input,
+    .page[data-page="locationSelect"] .location-entry button {
+      height: 50px;
+    }
+
+    .page[data-page="locationSelect"] .map-open-btn {
+      flex: 1 1 auto;
+      min-height: 0;
+      height: auto;
+      margin: 0 -8px;
+    }
+
+    .history-menu {
+      position: absolute;
+      left: 0;
+      right: 70px;
+      top: 56px;
+      display: none;
+      max-height: 192px;
+      overflow-y: auto;
+      border: 1px solid #cfd7e5;
+      border-radius: 8px;
+      background: #fff;
+      box-shadow: 0 10px 24px rgba(23, 43, 77, .16);
+      z-index: 900;
+    }
+
+    .history-menu.active {
+      display: grid;
+    }
+
+    .history-option {
+      min-height: 42px;
+      border: 0;
+      border-bottom: 1px solid #eef2f7;
+      padding: 0 11px;
+      background: #fff;
+      color: var(--ink);
+      font: inherit;
+      font-size: 14px;
+      font-weight: 700;
+      text-align: left;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .history-option:last-child {
+      border-bottom: 0;
+    }
+
+    .real-map {
+      flex: 1 1 auto;
+      min-height: 0;
+      margin: 0 -8px;
+      overflow: hidden;
+      background: #d8ecf4;
+    }
+
+    .page[data-page="locationSelect"] .map-open-btn.unavailable {
+      display: none;
+    }
+
+    .page[data-page="locationSelect"] .real-map {
+      display: block;
+      width: calc(100% + 16px);
+      height: calc(100% - 58px);
+      min-height: 0;
+    }
+
+    .real-map .leaflet-container,
+    .leaflet-container.real-map {
+      width: 100%;
+      height: 100%;
+    }
+
+    .real-map .leaflet-control-attribution {
+      font-size: 10px;
+    }
+
+    .real-map .leaflet-control-zoom a {
+      color: var(--ink);
+    }
+
+    .real-map.unavailable {
+      display: none;
+    }
+
+    .leaflet-container {
+      position: relative;
+      overflow: hidden;
+      width: 100%;
+      height: 100%;
+      background: #ddd;
+      outline: 0;
+      touch-action: pan-x pan-y;
+      font: 12px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    .leaflet-pane,
+    .leaflet-tile,
+    .leaflet-marker-icon,
+    .leaflet-marker-shadow,
+    .leaflet-tile-container,
+    .leaflet-pane > svg,
+    .leaflet-pane > canvas,
+    .leaflet-zoom-box,
+    .leaflet-image-layer,
+    .leaflet-layer {
+      position: absolute;
+      left: 0;
+      top: 0;
+    }
+
+    .leaflet-tile,
+    .leaflet-marker-icon,
+    .leaflet-marker-shadow {
+      user-select: none;
+      -webkit-user-drag: none;
+    }
+
+    .leaflet-tile {
+      width: 256px;
+      height: 256px;
+      filter: inherit;
+      visibility: hidden;
+      border: 0;
+    }
+
+    .leaflet-tile-loaded {
+      visibility: inherit;
+    }
+
+    .leaflet-pane { z-index: 400; }
+    .leaflet-tile-pane { z-index: 200; }
+    .leaflet-overlay-pane { z-index: 400; }
+    .leaflet-shadow-pane { z-index: 500; }
+    .leaflet-marker-pane { z-index: 600; }
+    .leaflet-tooltip-pane { z-index: 650; }
+    .leaflet-popup-pane { z-index: 700; }
+
+    .leaflet-control {
+      position: relative;
+      z-index: 800;
+      pointer-events: auto;
+    }
+
+    .leaflet-top,
+    .leaflet-bottom {
+      position: absolute;
+      z-index: 1000;
+      pointer-events: none;
+    }
+
+    .leaflet-top { top: 0; }
+    .leaflet-right { right: 0; }
+    .leaflet-bottom { bottom: 0; }
+    .leaflet-left { left: 0; }
+
+    .leaflet-control-zoom {
+      margin: 10px;
+      border: 1px solid rgba(0, 0, 0, .18);
+      border-radius: 4px;
+      overflow: hidden;
+      box-shadow: 0 1px 5px rgba(0, 0, 0, .2);
+    }
+
+    .leaflet-control-zoom a {
+      display: block;
+      width: 30px;
+      height: 30px;
+      background: #fff;
+      color: #111;
+      text-align: center;
+      text-decoration: none;
+      font-size: 20px;
+      font-weight: 700;
+      line-height: 30px;
+    }
+
+    .leaflet-control-zoom a + a {
+      border-top: 1px solid #ccc;
+    }
+
+    .leaflet-control-attribution {
+      margin: 0;
+      padding: 2px 5px;
+      background: rgba(255, 255, 255, .82);
+      color: #333;
+      font-size: 10px;
+    }
+
+    .leaflet-zoom-animated {
+      transform-origin: 0 0;
+    }
+
+    .leaflet-interactive {
+      cursor: pointer;
+    }
+
+    .map-pin-marker {
+      width: 20px;
+      height: 20px;
+      border: 3px solid #fff;
+      border-radius: 50% 50% 50% 0;
+      background: #ef4444;
+      box-shadow: 0 7px 16px rgba(20, 33, 61, .24);
+      transform: rotate(-45deg);
+    }
+
+    .map-pin-marker::after {
+      content: "";
+      position: absolute;
+      inset: 5px;
+      border-radius: 50%;
+      background: #fff;
+    }
+
     .search, .composer {
       min-height: 48px;
       display: flex;
@@ -114,11 +559,168 @@
       font-weight: 700;
     }
 
+    .search input {
+      min-width: 0;
+      flex: 1;
+      border: 0;
+      outline: 0;
+      background: transparent;
+      color: var(--ink);
+      font: inherit;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .search input::placeholder {
+      color: var(--muted);
+      opacity: 1;
+    }
+
+    .location-picker {
+      display: grid;
+      gap: 10px;
+      margin: 12px 0 18px;
+      padding: 12px;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      box-shadow: var(--shadow);
+    }
+
+    .location-entry {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .location-entry input {
+      min-width: 0;
+      height: 40px;
+      border: 1px solid #cfd7e5;
+      border-radius: 8px;
+      padding: 0 10px;
+      color: var(--ink);
+      background: #fff;
+      font: inherit;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .location-entry button {
+      height: 40px;
+      border: 0;
+      border-radius: 8px;
+      padding: 0 12px;
+      background: var(--blue);
+      color: #fff;
+      font-size: 13px;
+      font-weight: 900;
+    }
+
+    .map-open-btn {
+      min-height: 42px;
+      border: 1px solid #cfd7e5;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      background: #fff;
+      color: var(--blue);
+      font-size: 13px;
+      font-weight: 900;
+    }
+
+    .map-open-btn svg {
+      width: 18px;
+      height: 18px;
+    }
+
+    .mini-map {
+      position: relative;
+      height: 116px;
+      overflow: hidden;
+      border: 1px solid #cfe0f7;
+      border-radius: 9px;
+      background:
+        linear-gradient(90deg, rgba(37, 111, 230, .10) 1px, transparent 1px) 0 0 / 36px 36px,
+        linear-gradient(rgba(37, 111, 230, .10) 1px, transparent 1px) 0 0 / 36px 36px,
+        linear-gradient(135deg, #f7fbff 0%, #edf6f2 100%);
+      cursor: crosshair;
+    }
+
+    .location-modal-map {
+      height: 260px;
+      margin: 10px 0 12px;
+    }
+
+    #userLocationMap {
+      display: none;
+    }
+
+    .mini-map::before,
+    .mini-map::after {
+      content: "";
+      position: absolute;
+      background: rgba(54, 184, 125, .25);
+      border-radius: 999px;
+      transform: rotate(-18deg);
+    }
+
+    .mini-map::before { left: -18px; top: 56px; width: 260px; height: 15px; }
+    .mini-map::after { right: -26px; top: 28px; width: 190px; height: 11px; transform: rotate(22deg); }
+
+    .mini-map-pin {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: 18px;
+      height: 18px;
+      border: 3px solid #fff;
+      border-radius: 50% 50% 50% 0;
+      background: var(--red);
+      box-shadow: 0 7px 16px rgba(20, 33, 61, .24);
+      transform: translate(-50%, -100%) rotate(-45deg);
+      pointer-events: none;
+    }
+
+    .mini-map-pin::after {
+      content: "";
+      position: absolute;
+      inset: 4px;
+      border-radius: 50%;
+      background: #fff;
+    }
+
+    .location-hint {
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 750;
+      line-height: 1.4;
+    }
+
+    .distance-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 5px;
+      color: #53627a;
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .distance-row svg {
+      width: 14px;
+      height: 14px;
+      color: var(--green);
+    }
+
     .section-head { margin: 18px 0 12px; }
 
     .categories {
       display: grid;
-      grid-template-columns: repeat(5, 1fr);
+      grid-template-columns: repeat(6, 1fr);
       gap: 10px;
       margin-bottom: 18px;
     }
@@ -127,9 +729,22 @@
       display: grid;
       justify-items: center;
       gap: 7px;
+      border: 0;
+      padding: 0;
+      background: transparent;
       color: #2b3a55;
       font-size: 12px;
       font-weight: 700;
+      cursor: pointer;
+    }
+
+    .cat.active {
+      color: var(--blue);
+    }
+
+    .cat.active .cat-icon {
+      background: var(--blue);
+      color: #fff;
     }
 
     .cat-icon {
@@ -165,10 +780,30 @@
 
     .photo { width: 80px; height: 74px; border-radius: 8px; object-fit: cover; background: #dbe5f2; }
     .tag { display: inline-flex; align-items: center; height: 20px; padding: 0 7px; border-radius: 6px; background: var(--blue-soft); color: var(--blue); font-size: 11px; font-weight: 800; margin-left: 6px; }
+    .clinic-main { min-width: 0; }
+    .clinic-main h3 { margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .clinic-main .tag { margin: 0 0 6px; }
     .rating { display: flex; gap: 5px; align-items: center; color: #f5a623; font-size: 12px; font-weight: 800; margin-bottom: 5px; }
     .rating span, .address, .muted { color: var(--muted); font-size: 12px; font-weight: 600; }
     .address { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 172px; }
     .bookmark { align-self: start; color: #9aa6b8; }
+    .bookmark-btn {
+      width: 24px;
+      height: 30px;
+      border: 0;
+      padding: 0;
+      display: grid;
+      place-items: start center;
+      background: transparent;
+      color: #9aa6b8;
+      cursor: pointer;
+    }
+    .bookmark-btn.active {
+      color: var(--blue);
+    }
+    .bookmark-btn.active svg {
+      fill: currentColor;
+    }
 
     .icon-btn {
       width: 38px;
@@ -319,6 +954,46 @@
     .doctor-practice-actions { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
     .doctor-practice-action { height: 32px; border: 0; background: transparent; color: #111827; font-size: 13px; font-weight: 800; }
     .doctor-practice-action.danger { color: var(--red); }
+    .doctor-search-card {
+      min-height: 82px;
+      display: grid;
+      grid-template-columns: 58px 1fr;
+      gap: 12px;
+      align-items: center;
+      padding: 12px;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      box-shadow: var(--shadow);
+    }
+    .doctor-search-card img { width: 54px; height: 54px; border-radius: 50%; object-fit: cover; background: #e8edf5; }
+    .doctor-search-card h3 { margin: 0 0 5px; font-size: 15px; }
+    .doctor-search-card p { color: var(--muted); font-size: 12px; line-height: 1.45; font-weight: 700; }
+    .doctor-search-rating {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      margin: 0 0 3px;
+      color: #f5a623;
+      font-size: 12px;
+      font-weight: 800;
+    }
+    .doctor-search-rating span {
+      color: var(--muted);
+      font-weight: 700;
+    }
+    .clinic-doctor-match {
+      margin-top: -8px;
+      padding: 0 12px 0 104px;
+    }
+    .clinic-doctor-match .doctor-search-card {
+      min-height: 62px;
+      grid-template-columns: 44px 1fr;
+      padding: 10px;
+      border-color: #dbe7f7;
+      box-shadow: none;
+    }
+    .clinic-doctor-match img { width: 40px; height: 40px; }
     .empty-state { padding: 18px 12px; color: var(--muted); font-size: 13px; font-weight: 800; text-align: center; }
     .invite-search { margin-bottom: 18px; box-shadow: none; }
     .invite-doctor-list { display: grid; gap: 4px; }
@@ -340,6 +1015,7 @@
     .field label { color: #53627a; font-size: 12px; font-weight: 800; }
     .field input, .field select, .field textarea { width: 100%; border: 1px solid #cfd7e5; border-radius: 8px; padding: 0 11px; color: var(--ink); background: #fff; font: inherit; font-size: 14px; font-weight: 650; }
     .field input, .field select { height: 42px; }
+    .field input[type="file"] { height: auto; padding: 10px 11px; }
     .field textarea { min-height: 88px; padding-top: 10px; resize: vertical; line-height: 1.5; }
     .form-check { min-height: 46px; display: grid; grid-template-columns: 20px 1fr; gap: 10px; align-items: center; padding: 10px 12px; border: 1px solid var(--line); border-radius: 8px; background: #f8fbff; color: var(--ink); font-size: 14px; font-weight: 850; }
     .form-check input { width: 18px; height: 18px; accent-color: var(--blue); }
@@ -601,8 +1277,19 @@
             台北市信義區
           </div>
           <div class="search">
-            <span>搜尋診所、科別或醫師</span>
+            <input id="homeSearchInput" type="search" placeholder="搜尋診所、科別或地址">
             <svg viewBox="0 0 24 24" style="margin-left:auto"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path></svg>
+          </div>
+
+          <div class="location-picker">
+            <div class="location-entry">
+              <input id="userAddressInput" type="text" placeholder="輸入我的位置或地址">
+              <button id="setUserAddress" type="button">套用</button>
+            </div>
+            <button class="mini-map" id="userLocationMap" type="button" aria-label="在地圖上標定我的位置">
+              <span class="mini-map-pin" id="userLocationPin"></span>
+            </button>
+            <div class="location-hint" id="userLocationStatus">輸入地址或點地圖後，診所卡會顯示距離。</div>
           </div>
 
           <div class="section-head">
@@ -911,7 +1598,7 @@
 
           <form class="form-panel" id="openedClinicForm">
             <input type="hidden" id="openedClinicId">
-            <div class="field">
+            <div class="field doctor-photo-field">
               <label for="openedClinicName">診所名稱</label>
               <input id="openedClinicName" required>
             </div>
@@ -998,7 +1685,8 @@
             </div>
             <div class="field">
               <label for="practiceClinicName">執業診所</label>
-              <input id="practiceClinicName" required>
+              <input id="practicePhoto" type="file" accept="image/*">
+              <input id="practicePhotoData" type="hidden">
             </div>
             <div class="field">
               <label for="practiceNote">備註</label>
@@ -1196,10 +1884,37 @@
     </section>
   </main>
 
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
   <script>
-    const pages = document.querySelectorAll(".page");
+    let pages = document.querySelectorAll(".page");
     const navItems = document.querySelectorAll(".nav-item");
+    const homeLocation = document.querySelector('.page[data-page="home"] .location');
+    const homeSearchInput = document.querySelector("#homeSearchInput");
+    const categoryButtons = document.querySelectorAll(".categories .cat");
     const homeClinicList = document.querySelector("#homeClinicList");
+    const userAddressInput = document.querySelector("#userAddressInput");
+    const setUserAddress = document.querySelector("#setUserAddress");
+    const userLocationMap = document.querySelector("#userLocationMap");
+    const userLocationPin = document.querySelector("#userLocationPin");
+    const userLocationStatus = document.querySelector("#userLocationStatus");
+    let openLocationMap = null;
+    let locationMapModal = null;
+    let locationPickerMap = null;
+    let locationPickerPin = null;
+    let locationModalStatus = null;
+    let closeLocationMap = null;
+    let cancelLocationMap = null;
+    let confirmLocationMap = null;
+    let backLocationSelect = null;
+    let locationAddressInput = null;
+    let applyLocationAddress = null;
+    let openLocationSelectMap = null;
+    let locationRealMap = null;
+    let locationHistoryMenu = null;
+    let finishLocationSelect = null;
+    let locationSelectStatus = null;
+    let leafletMap = null;
+    let leafletMarker = null;
     const backHome = document.querySelector("#backHome");
     const detailCover = document.querySelector("#detailCover");
     const detailName = document.querySelector("#detailName");
@@ -1236,7 +1951,8 @@
     const practiceDoctorName = document.querySelector("#practiceDoctorName");
     const practiceLicenseNo = document.querySelector("#practiceLicenseNo");
     const practiceSpecialty = document.querySelector("#practiceSpecialty");
-    const practiceClinicName = document.querySelector("#practiceClinicName");
+    const practicePhoto = document.querySelector("#practicePhoto");
+    const practicePhotoData = document.querySelector("#practicePhotoData");
     const practiceNote = document.querySelector("#practiceNote");
     const cancelDoctorPracticeCard = document.querySelector("#cancelDoctorPracticeCard");
     const newOpenedClinic = document.querySelector("#newOpenedClinic");
@@ -1350,6 +2066,9 @@
     const noticesKey = "clinicAppNotices";
     const doctorPracticeCardsKey = "clinicAppDoctorPracticeCards";
     const scheduleChangesKey = "clinicAppScheduleChanges";
+    const userLocationKey = "clinicAppUserLocation";
+    const locationHistoryKey = "clinicAppLocationHistory";
+    const followedClinicsKey = "clinicAppFollowedClinics";
     const emptyDataVersionKey = "clinicAppEmptyDataVersion";
     const emptyDataVersion = "empty-v1";
     const emptyProgressAppointmentsVersionKey = "clinicAppEmptyProgressAppointmentsVersion";
@@ -1378,6 +2097,11 @@
     let appointments = loadAppointments();
     let notices = loadNotices();
     let doctorPracticeCards = loadDoctorPracticeCards();
+    let userLocation = loadUserLocation();
+    let locationHistory = loadLocationHistory();
+    let followedClinics = loadFollowedClinics();
+    let pendingMapLocation = null;
+    let activeCategoryFilter = "";
     let bookingDraft = null;
     let cooperationRecordDraft = null;
     let directApplyMode = "schedule";
@@ -1460,6 +2184,487 @@
 
     function saveOpenedClinics() {
       localStorage.setItem(openedClinicsKey, JSON.stringify(openedClinics));
+    }
+
+    function loadUserLocation() {
+      const saved = localStorage.getItem(userLocationKey);
+      if (saved) {
+        try {
+          const parsed = JSON.parse(saved);
+          if (Number.isFinite(parsed.lat) && Number.isFinite(parsed.lng)) return parsed;
+        } catch (error) {
+          localStorage.removeItem(userLocationKey);
+        }
+      }
+      return null;
+    }
+
+    function saveUserLocation() {
+      if (!userLocation) {
+        localStorage.removeItem(userLocationKey);
+        return;
+      }
+      localStorage.setItem(userLocationKey, JSON.stringify(userLocation));
+    }
+
+    function loadLocationHistory() {
+      const saved = localStorage.getItem(locationHistoryKey);
+      if (!saved) return [];
+      try {
+        const parsed = JSON.parse(saved);
+        return Array.isArray(parsed) ? parsed.filter(Boolean).slice(0, 10) : [];
+      } catch (error) {
+        localStorage.removeItem(locationHistoryKey);
+        return [];
+      }
+    }
+
+    function saveLocationHistory() {
+      localStorage.setItem(locationHistoryKey, JSON.stringify(locationHistory.slice(0, 10)));
+    }
+
+    function loadFollowedClinics() {
+      const saved = localStorage.getItem(followedClinicsKey);
+      if (!saved) return [];
+      try {
+        const parsed = JSON.parse(saved);
+        return Array.isArray(parsed) ? parsed : [];
+      } catch (error) {
+        localStorage.removeItem(followedClinicsKey);
+        return [];
+      }
+    }
+
+    function saveFollowedClinics() {
+      localStorage.setItem(followedClinicsKey, JSON.stringify(followedClinics));
+    }
+
+    function isClinicFollowed(clinicId) {
+      return followedClinics.includes(clinicId);
+    }
+
+    function toggleClinicFollow(clinicId) {
+      if (!clinicId) return;
+      followedClinics = isClinicFollowed(clinicId)
+        ? followedClinics.filter((id) => id !== clinicId)
+        : [...followedClinics, clinicId];
+      saveFollowedClinics();
+      renderHomeClinics();
+    }
+
+    function rememberLocationLabel(label) {
+      const trimmed = String(label || "").trim();
+      if (!trimmed) return;
+      locationHistory = [trimmed, ...locationHistory.filter((item) => item !== trimmed)].slice(0, 10);
+      saveLocationHistory();
+      renderLocationHistoryOptions();
+    }
+
+    function renderLocationHistoryOptions() {
+      if (!locationHistoryMenu) return;
+      locationHistoryMenu.innerHTML = locationHistory.map((item) => (
+        `<button class="history-option" type="button" data-location-history="${escapeHTML(item)}">${escapeHTML(item)}</button>`
+      )).join("");
+      locationHistoryMenu.classList.toggle("active", document.activeElement === locationAddressInput && locationHistory.length > 0);
+    }
+
+    function showLocationHistoryMenu() {
+      if (!locationHistoryMenu || locationHistory.length === 0) return;
+      renderLocationHistoryOptions();
+      locationHistoryMenu.classList.add("active");
+    }
+
+    function hideLocationHistoryMenu() {
+      if (!locationHistoryMenu) return;
+      setTimeout(() => locationHistoryMenu.classList.remove("active"), 120);
+    }
+
+    function toggleLocationHistoryMenu() {
+      if (!locationHistoryMenu || locationHistory.length === 0) return;
+      if (locationHistoryMenu.classList.contains("active")) {
+        locationHistoryMenu.classList.remove("active");
+        return;
+      }
+      showLocationHistoryMenu();
+    }
+
+    const taipeiGeoPoints = [
+      { keys: ["信義", "101", "松仁", "信義路"], lat: 25.0339, lng: 121.5645 },
+      { keys: ["大安", "仁愛", "復興", "敦化"], lat: 25.0375, lng: 121.5432 },
+      { keys: ["中正", "台大", "公館", "羅斯福"], lat: 25.0219, lng: 121.5354 },
+      { keys: ["松山", "南京", "民生"], lat: 25.0568, lng: 121.5630 },
+      { keys: ["中山", "林森", "南京東"], lat: 25.0520, lng: 121.5250 },
+      { keys: ["士林", "天母", "文林"], lat: 25.0946, lng: 121.5246 },
+      { keys: ["內湖", "港墘", "成功路"], lat: 25.0820, lng: 121.5909 },
+      { keys: ["南港", "昆陽", "研究院"], lat: 25.0553, lng: 121.6070 },
+      { keys: ["萬華", "西門", "艋舺"], lat: 25.0377, lng: 121.4999 },
+      { keys: ["板橋", "府中", "新埔"], lat: 25.0138, lng: 121.4649 }
+    ];
+
+    function hashText(value) {
+      return String(value).split("").reduce((sum, char) => sum + char.charCodeAt(0), 0);
+    }
+
+    function estimateCoordsFromText(value) {
+      const text = String(value || "");
+      const matched = taipeiGeoPoints.find((point) => point.keys.some((key) => text.includes(key)));
+      if (matched) return { lat: matched.lat, lng: matched.lng };
+      const hash = hashText(text);
+      return {
+        lat: 25.0478 + (((hash % 37) - 18) * 0.0021),
+        lng: 121.5319 + ((((hash / 37) % 41) - 20) * 0.0023)
+      };
+    }
+
+    function coordsFromMapEvent(event) {
+      const mapElement = event.currentTarget || userLocationMap;
+      const rect = mapElement.getBoundingClientRect();
+      const x = Math.min(Math.max((event.clientX - rect.left) / rect.width, 0), 1);
+      const y = Math.min(Math.max((event.clientY - rect.top) / rect.height, 0), 1);
+      return {
+        lat: 25.105 - y * 0.115,
+        lng: 121.455 + x * 0.175,
+        pinX: x,
+        pinY: y
+      };
+    }
+
+    function pinFromCoords(coords) {
+      if (!coords) return { pinX: 0.3, pinY: 0.42 };
+      return {
+        pinX: Math.min(Math.max((coords.lng - 121.455) / 0.175, 0.08), 0.92),
+        pinY: Math.min(Math.max((25.105 - coords.lat) / 0.115, 0.08), 0.92)
+      };
+    }
+
+    function addressFromCoords(coords) {
+      if (!coords || !Number.isFinite(coords.lat) || !Number.isFinite(coords.lng)) return "地圖標定位置";
+      const candidates = [
+        { name: "台北市信義區信義路五段", lat: 25.0339, lng: 121.5645 },
+        { name: "台北市信義區松仁路", lat: 25.0358, lng: 121.5687 },
+        { name: "台北市信義區松高路", lat: 25.0395, lng: 121.5651 },
+        { name: "台北市大安區仁愛路四段", lat: 25.0375, lng: 121.5432 },
+        { name: "台北市大安區復興南路一段", lat: 25.0420, lng: 121.5435 },
+        { name: "台北市中山區南京東路二段", lat: 25.0520, lng: 121.5250 },
+        { name: "台北市松山區南京東路五段", lat: 25.0568, lng: 121.5630 },
+        { name: "台北市中正區羅斯福路四段", lat: 25.0219, lng: 121.5354 },
+        { name: "台北市內湖區成功路四段", lat: 25.0820, lng: 121.5909 },
+        { name: "台北市南港區忠孝東路七段", lat: 25.0553, lng: 121.6070 }
+      ];
+      const nearest = candidates
+        .map((item) => ({ ...item, km: distanceKm(coords, item) }))
+        .sort((a, b) => a.km - b.km)[0];
+      const lane = Math.max(1, Math.round(Math.abs((coords.lat * 1000 + coords.lng * 1000)) % 9) * 10 + 1);
+      const number = Math.max(1, Math.round(Math.abs((coords.lat * 10000 - coords.lng * 10000)) % 120));
+      if (nearest.km > 12) return `地圖標定位置 ${coords.lat.toFixed(5)}, ${coords.lng.toFixed(5)}`;
+      return `${nearest.name}${lane}巷${number}號附近`;
+    }
+
+    function distanceKm(from, to) {
+      const radius = 6371;
+      const toRad = (degree) => degree * Math.PI / 180;
+      const dLat = toRad(to.lat - from.lat);
+      const dLng = toRad(to.lng - from.lng);
+      const lat1 = toRad(from.lat);
+      const lat2 = toRad(to.lat);
+      const a = Math.sin(dLat / 2) ** 2 + Math.cos(lat1) * Math.cos(lat2) * Math.sin(dLng / 2) ** 2;
+      return radius * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    }
+
+    function formatDistance(km) {
+      if (!Number.isFinite(km)) return "";
+      if (km < 1) return `${Math.max(50, Math.round(km * 1000 / 50) * 50)} m`;
+      return `${km.toFixed(km < 10 ? 1 : 0)} km`;
+    }
+
+    function getClinicDistanceLabel(clinic) {
+      if (!userLocation || !clinic) return "";
+      const clinicCoords = estimateCoordsFromText(`${clinic.address || ""} ${clinic.name || ""}`);
+      return formatDistance(distanceKm(userLocation, clinicCoords));
+    }
+
+    function getClinicDistanceById(clinicId, detail = null) {
+      const openedClinic = openedClinics.find((clinic) => clinic.id === clinicId);
+      if (openedClinic) return getClinicDistanceLabel(openedClinic);
+      return getClinicDistanceLabel({
+        id: clinicId,
+        name: detail?.name || "",
+        address: detail?.address || detail?.about || ""
+      });
+    }
+
+    function renderUserLocationControls() {
+      if (!userAddressInput || !userLocationStatus || !userLocationPin) return;
+      userAddressInput.value = userLocation?.label || "";
+      userLocationStatus.textContent = userLocation
+        ? `目前位置：${userLocation.label || "地圖標定位置"}`
+        : "輸入地址或點地圖後，診所卡會顯示距離。";
+      const pinX = Number.isFinite(userLocation?.pinX) ? userLocation.pinX : 0.5;
+      const pinY = Number.isFinite(userLocation?.pinY) ? userLocation.pinY : 0.5;
+      userLocationPin.style.left = `${pinX * 100}%`;
+      userLocationPin.style.top = `${pinY * 100}%`;
+      if (locationPickerPin) {
+        locationPickerPin.style.left = `${pinX * 100}%`;
+        locationPickerPin.style.top = `${pinY * 100}%`;
+      }
+      if (locationModalStatus) {
+        locationModalStatus.textContent = userLocation
+          ? `目前標定：${userLocation.label || "地圖標定位置"}`
+          : "點選地圖標定你的所在位置。";
+      }
+    }
+
+    function updateLocationSelectionLabels() {
+      if (locationAddressInput) locationAddressInput.value = userLocation?.label || "";
+      if (homeLocation) {
+        const homeLabel = userLocation?.label || "台北市信義區";
+        homeLocation.innerHTML = `<svg viewBox="0 0 24 24"><path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0Z"></path><circle cx="12" cy="10" r="3"></circle></svg><span>${escapeHTML(homeLabel)}</span>`;
+      }
+      if (locationSelectStatus) {
+        locationSelectStatus.textContent = userLocation
+          ? `目前位置：${userLocation.label || "地圖標定位置"}`
+          : "目前位置：台北市信義區";
+      }
+    }
+
+    function createLocationSelectionPage() {
+      if (document.querySelector('[data-page="locationSelect"]')) return;
+      document.querySelector('[data-page="home"]').insertAdjacentHTML("afterend", `
+        <section class="page" data-page="locationSelect">
+          <div class="topbar">
+            <button class="icon-btn" id="backLocationSelect" aria-label="返回首頁">
+              <svg viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"></path></svg>
+            </button>
+            <h1>位置選擇</h1>
+            <span style="width:38px"></span>
+          </div>
+          <div class="location-select-panel">
+            <div class="location-entry">
+              <input id="locationAddressInput" type="text" autocomplete="off" placeholder="輸入我的位置或地址">
+              <div class="history-menu" id="locationHistoryMenu"></div>
+              <button id="applyLocationAddress" type="button">套用</button>
+            </div>
+            <button class="map-open-btn" id="openLocationSelectMap" type="button">
+              <svg viewBox="0 0 24 24"><path d="M9 18 3 21V6l6-3 6 3 6-3v15l-6 3-6-3Z"></path><path d="M9 3v15"></path><path d="M15 6v15"></path></svg>
+              <span>用地圖標定位置</span>
+            </button>
+            <div class="location-hint" id="locationSelectStatus">目前位置：台北市信義區</div>
+            <button class="primary-btn" id="finishLocationSelect" type="button">完成</button>
+          </div>
+        </section>
+      `);
+      pages = document.querySelectorAll(".page");
+      backLocationSelect = document.querySelector("#backLocationSelect");
+      locationAddressInput = document.querySelector("#locationAddressInput");
+      applyLocationAddress = document.querySelector("#applyLocationAddress");
+      locationHistoryMenu = document.querySelector("#locationHistoryMenu");
+      openLocationSelectMap = document.querySelector("#openLocationSelectMap");
+      openLocationSelectMap.insertAdjacentHTML("afterend", `<div class="real-map unavailable" id="locationRealMap"></div>`);
+      locationRealMap = document.querySelector("#locationRealMap");
+      finishLocationSelect = document.querySelector("#finishLocationSelect");
+      locationSelectStatus = document.querySelector("#locationSelectStatus");
+    }
+
+    function openLocationSelectionPage() {
+      renderUserLocationControls();
+      updateLocationSelectionLabels();
+      setLocationMapPin(userLocation);
+      showPage("locationSelect");
+      initializeRealMap();
+      refreshRealMapSize();
+    }
+
+    function applyLocationAddressValue() {
+      const label = (locationAddressInput?.value || userAddressInput.value).trim();
+      if (!label) return;
+      const coords = estimateCoordsFromText(label);
+      userLocation = { ...coords, ...pinFromCoords(coords), label };
+      rememberLocationLabel(label);
+      saveUserLocation();
+      renderUserLocationControls();
+      updateLocationSelectionLabels();
+      setLocationMapPin(userLocation);
+      if (leafletMap && leafletMarker) {
+        const latLng = [userLocation.lat, userLocation.lng];
+        leafletMarker.setLatLng(latLng);
+        leafletMap.setView(latLng, 15);
+      }
+      renderHomeClinics();
+      if (activeClinicId) renderClinicDetail(activeClinicId);
+      applyLocationAddress.textContent = "已套用";
+      setTimeout(() => {
+        applyLocationAddress.textContent = "套用";
+        showPage("home", { replace: true });
+      }, 350);
+    }
+
+    function setLocationMapPin(location) {
+      if (!openLocationSelectMap || !location) return;
+      const pinX = Number.isFinite(location.pinX) ? location.pinX : 0.3;
+      const pinY = Number.isFinite(location.pinY) ? location.pinY : 0.4;
+      openLocationSelectMap.style.setProperty("--pin-x", `${pinX * 100}%`);
+      openLocationSelectMap.style.setProperty("--pin-y", `${pinY * 100}%`);
+      if (leafletMarker && leafletMap && Number.isFinite(location.lat) && Number.isFinite(location.lng)) {
+        const latLng = [location.lat, location.lng];
+        leafletMarker.setLatLng(latLng);
+        leafletMap.setView(latLng, Math.max(leafletMap.getZoom(), 14));
+      }
+    }
+
+    function initializeRealMap() {
+      if (!locationRealMap || leafletMap || !window.L) return;
+      openLocationSelectMap.classList.add("unavailable");
+      locationRealMap.classList.remove("unavailable");
+      const center = userLocation && Number.isFinite(userLocation.lat) && Number.isFinite(userLocation.lng)
+        ? [userLocation.lat, userLocation.lng]
+        : [25.0339, 121.5645];
+      leafletMap = L.map(locationRealMap, {
+        zoomControl: true,
+        attributionControl: true
+      }).setView(center, 14);
+      L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+        maxZoom: 19,
+        attribution: "&copy; OpenStreetMap"
+      }).addTo(leafletMap);
+      const markerIcon = L.divIcon({
+        className: "",
+        html: '<span class="map-pin-marker"></span>',
+        iconSize: [26, 26],
+        iconAnchor: [13, 24]
+      });
+      leafletMarker = L.marker(center, { draggable: true, icon: markerIcon }).addTo(leafletMap);
+      const applyLatLng = (latLng) => {
+        const coords = { lat: latLng.lat, lng: latLng.lng };
+        userLocation = {
+          ...coords,
+          ...pinFromCoords(coords),
+          label: addressFromCoords(coords)
+        };
+        saveUserLocation();
+        rememberLocationLabel(userLocation.label);
+        setLocationMapPin(userLocation);
+        renderUserLocationControls();
+        updateLocationSelectionLabels();
+        renderHomeClinics();
+        if (activeClinicId) renderClinicDetail(activeClinicId);
+      };
+      leafletMap.on("click", (event) => applyLatLng(event.latlng));
+      leafletMarker.on("dragend", () => applyLatLng(leafletMarker.getLatLng()));
+      refreshRealMapSize();
+    }
+
+    function refreshRealMapSize() {
+      if (!leafletMap) return;
+      requestAnimationFrame(() => leafletMap.invalidateSize());
+      setTimeout(() => leafletMap.invalidateSize(), 120);
+      setTimeout(() => leafletMap.invalidateSize(), 360);
+    }
+
+    function setUserLocationFromSelectionMap(event) {
+      const coords = coordsFromMapEvent(event);
+      userLocation = { ...coords, label: addressFromCoords(coords) };
+      saveUserLocation();
+      rememberLocationLabel(userLocation.label);
+      setLocationMapPin(userLocation);
+      renderUserLocationControls();
+      updateLocationSelectionLabels();
+      renderHomeClinics();
+      if (activeClinicId) renderClinicDetail(activeClinicId);
+      setTimeout(() => showPage("home", { replace: true }), 250);
+    }
+
+    function createLocationMapModal() {
+      if (locationMapModal) return;
+      const hiddenMap = userLocationMap;
+      hiddenMap.insertAdjacentHTML("beforebegin", `
+        <button class="map-open-btn" id="openLocationMap" type="button">
+          <svg viewBox="0 0 24 24"><path d="M9 18 3 21V6l6-3 6 3 6-3v15l-6 3-6-3Z"></path><path d="M9 3v15"></path><path d="M15 6v15"></path></svg>
+          <span>標定地圖位置</span>
+        </button>
+      `);
+      document.querySelector(".phone").insertAdjacentHTML("beforeend", `
+        <div class="modal" id="locationMapModal" aria-hidden="true">
+          <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="locationMapTitle">
+            <div class="sheet-head">
+              <h2 id="locationMapTitle">標定地圖位置</h2>
+              <button class="icon-btn" id="closeLocationMap" aria-label="關閉">
+                <svg viewBox="0 0 24 24"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg>
+              </button>
+            </div>
+            <p class="location-hint" id="locationModalStatus">點選地圖標定你的所在位置。</p>
+            <button class="mini-map location-modal-map" id="locationPickerMap" type="button" aria-label="在地圖上標定我的位置">
+              <span class="mini-map-pin" id="locationPickerPin"></span>
+            </button>
+            <div class="form-actions">
+              <button class="btn" type="button" id="cancelLocationMap">取消</button>
+              <button class="primary-btn" type="button" id="confirmLocationMap">套用位置</button>
+            </div>
+          </div>
+        </div>
+      `);
+      openLocationMap = document.querySelector("#openLocationMap");
+      locationMapModal = document.querySelector("#locationMapModal");
+      locationPickerMap = document.querySelector("#locationPickerMap");
+      locationPickerPin = document.querySelector("#locationPickerPin");
+      locationModalStatus = document.querySelector("#locationModalStatus");
+      closeLocationMap = document.querySelector("#closeLocationMap");
+      cancelLocationMap = document.querySelector("#cancelLocationMap");
+      confirmLocationMap = document.querySelector("#confirmLocationMap");
+    }
+
+    function openLocationMapModal() {
+      pendingMapLocation = userLocation ? { ...userLocation } : null;
+      locationMapModal.classList.add("active");
+      locationMapModal.setAttribute("aria-hidden", "false");
+      renderUserLocationControls();
+    }
+
+    function closeLocationMapModal() {
+      locationMapModal.classList.remove("active");
+      locationMapModal.setAttribute("aria-hidden", "true");
+      pendingMapLocation = null;
+      renderUserLocationControls();
+    }
+
+    function previewUserLocationFromMap(event) {
+      const coords = coordsFromMapEvent(event);
+      pendingMapLocation = { ...coords, label: addressFromCoords(coords) };
+      const pinX = Number.isFinite(pendingMapLocation.pinX) ? pendingMapLocation.pinX : 0.5;
+      const pinY = Number.isFinite(pendingMapLocation.pinY) ? pendingMapLocation.pinY : 0.5;
+      locationPickerPin.style.left = `${pinX * 100}%`;
+      locationPickerPin.style.top = `${pinY * 100}%`;
+      locationModalStatus.textContent = pendingMapLocation.label;
+    }
+
+    function confirmUserLocationFromMap() {
+      if (!pendingMapLocation) return;
+      userLocation = pendingMapLocation;
+      saveUserLocation();
+      closeLocationMapModal();
+      updateLocationSelectionLabels();
+      renderHomeClinics();
+      if (activeClinicId) renderClinicDetail(activeClinicId);
+    }
+
+    function setUserLocationFromAddress() {
+      const label = userAddressInput.value.trim();
+      if (!label) return;
+      userLocation = { ...estimateCoordsFromText(label), label };
+      saveUserLocation();
+      renderUserLocationControls();
+      updateLocationSelectionLabels();
+      renderHomeClinics();
+      if (activeClinicId) renderClinicDetail(activeClinicId);
+    }
+
+    function setUserLocationFromMap(event) {
+      const coords = coordsFromMapEvent(event);
+      userLocation = { ...coords, label: addressFromCoords(coords) };
+      saveUserLocation();
+      rememberLocationLabel(userLocation.label);
+      renderUserLocationControls();
+      renderHomeClinics();
+      if (activeClinicId) renderClinicDetail(activeClinicId);
     }
 
     function loadAppointments() {
@@ -1719,6 +2924,74 @@
       };
     }
 
+    function getClinicSearchDoctors(clinic) {
+      const doctors = [];
+      const openedClinic = openedClinics.find((item) => item.id === clinic.id || item.name === clinic.name);
+      (openedClinic?.invitedDoctors || []).forEach((doctor) => {
+        const card = getDoctorPracticeByTeamDoctor(doctor);
+        doctors.push(doctor.name, doctor.id, doctor.specialty, card?.doctorName, card?.licenseNo, card?.specialty, card?.note);
+      });
+      doctorPracticeCards.forEach((card) => {
+        if (
+          card.clinicId === clinic.id ||
+          card.clinicName === clinic.name ||
+          card.specialty === clinic.tag ||
+          String(card.note || "").includes(clinic.name)
+        ) {
+          doctors.push(card.doctorName, card.licenseNo, card.specialty, card.note);
+        }
+      });
+      return doctors.filter(Boolean);
+    }
+
+    function getDoctorCardsForClinic(clinic, keyword = "") {
+      if (!clinic || !keyword) return [];
+      const openedClinic = openedClinics.find((item) => item.id === clinic.id || item.name === clinic.name);
+      const teamCards = (openedClinic?.invitedDoctors || [])
+        .map((doctor) => getDoctorPracticeByTeamDoctor(doctor) || {
+          id: doctor.id,
+          doctorName: doctor.name,
+          licenseNo: doctor.id,
+          specialty: doctor.specialty || openedClinic.category || clinic.tag,
+          photo: ""
+        });
+      return teamCards.filter((card) => [
+        card.doctorName,
+        card.licenseNo,
+        card.specialty,
+        card.note
+      ].some((value) => String(value || "").toLowerCase().includes(keyword)));
+    }
+
+    function getDoctorClinicIds(card) {
+      const clinicIds = new Set();
+      openedClinics.forEach((clinic) => {
+        const matches = (clinic.invitedDoctors || []).some((doctor) => (
+          doctor.cardId === card.id ||
+          doctor.id === card.licenseNo ||
+          doctor.name === card.doctorName
+        ));
+        if (matches) clinicIds.add(clinic.id);
+      });
+      return clinicIds;
+    }
+
+    function renderDoctorSearchCard(card) {
+      const rating = card.rating || "4.8";
+      const reviews = card.reviews || "新增";
+      return `
+        <article class="doctor-search-card">
+          <img src="${escapeHTML(card.photo || `https://i.pravatar.cc/96?u=${encodeURIComponent(card.id)}`)}" alt="${escapeHTML(card.doctorName)}">
+          <div>
+            <h3>${escapeHTML(card.doctorName)}</h3>
+            <div class="doctor-search-rating">★ <span>${escapeHTML(rating)} (${escapeHTML(reviews)})</span></div>
+            <p>${escapeHTML(card.specialty)} / 醫師證號 ${escapeHTML(card.licenseNo)}</p>
+            ${card.note ? `<p>${escapeHTML(card.note)}</p>` : ""}
+          </div>
+        </article>
+      `;
+    }
+
     function renderHomeClinics() {
       const baseCards = baseHomeClinicIds.map((id) => ({
         id,
@@ -1742,22 +3015,77 @@
           image: clinic.image
         }));
 
-      homeClinicList.innerHTML = [...openedCards, ...baseCards].map((clinic) => `
+      const clinicCards = [...openedCards, ...baseCards].map((clinic) => ({
+        ...clinic,
+        searchDoctors: getClinicSearchDoctors(clinic),
+        distance: getClinicDistanceLabel(clinic)
+      }));
+
+      const keyword = homeSearchInput?.value.trim().toLowerCase() || "";
+      const filteredCards = keyword
+        ? clinicCards.filter((clinic) => [
+          clinic.name,
+          clinic.tag,
+          clinic.address,
+          clinic.rating,
+          clinic.reviews,
+          ...(clinic.searchDoctors || [])
+        ].some((value) => String(value || "").toLowerCase().includes(keyword)))
+        : clinicCards;
+      const visibleCards = activeCategoryFilter
+        ? filteredCards.filter((clinic) => activeCategoryFilter === "我的關注"
+          ? isClinicFollowed(clinic.id)
+          : String(clinic.tag || "").includes(activeCategoryFilter))
+        : filteredCards;
+      const doctorResultCards = keyword && !activeCategoryFilter
+        ? doctorPracticeCards.filter((card) => [
+          card.doctorName,
+          card.licenseNo,
+          card.specialty,
+          card.note
+        ].some((value) => String(value || "").toLowerCase().includes(keyword)) && getDoctorClinicIds(card).size === 0)
+        : [];
+
+      if (!visibleCards.length && !doctorResultCards.length) {
+        homeClinicList.innerHTML = `<div class="empty-state">找不到符合的診所</div>`;
+        return;
+      }
+
+      homeClinicList.innerHTML = [
+        ...visibleCards.map((clinic) => `
         <article class="clinic-card" data-clinic="${escapeHTML(clinic.id)}" role="button" tabindex="0" aria-label="查看${escapeHTML(clinic.name)}詳情">
           <img class="photo" src="${escapeHTML(clinic.image)}" alt="${escapeHTML(clinic.name)}">
-          <div><h3>${escapeHTML(clinic.name)} <span class="tag">${escapeHTML(clinic.tag)}</span></h3><div class="rating">★<span>${escapeHTML(clinic.rating)} (${escapeHTML(clinic.reviews)})</span></div><div class="address">${escapeHTML(clinic.address)}</div></div>
-          <svg class="bookmark" viewBox="0 0 24 24"><path d="M19 21 12 17 5 21V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2Z"></path></svg>
+          <div class="clinic-main"><h3>${escapeHTML(clinic.name)}</h3><span class="tag">${escapeHTML(clinic.tag)}</span><div class="rating">★<span>${escapeHTML(clinic.rating)} (${escapeHTML(clinic.reviews)})</span></div><div class="address">${escapeHTML(clinic.address)}</div></div>
+          <button class="bookmark-btn ${isClinicFollowed(clinic.id) ? "active" : ""}" type="button" data-follow-clinic="${escapeHTML(clinic.id)}" aria-label="${isClinicFollowed(clinic.id) ? "取消關注" : "關注診所"}"><svg class="bookmark" viewBox="0 0 24 24"><path d="M19 21 12 17 5 21V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2Z"></path></svg></button>
         </article>
-      `).join("");
+        ${keyword ? getDoctorCardsForClinic(clinic, keyword).map((card) => `<div class="clinic-doctor-match">${renderDoctorSearchCard(card)}</div>`).join("") : ""}
+      `),
+        ...doctorResultCards.map(renderDoctorSearchCard)
+      ].join("");
 
       homeClinicList.querySelectorAll(".clinic-card").forEach((card) => {
+        const clinic = visibleCards.find((item) => item.id === card.dataset.clinic);
+        if (clinic?.distance) {
+          const info = card.querySelector("div");
+          info.insertAdjacentHTML("beforeend", `<div class="distance-row"><svg viewBox="0 0 24 24"><path d="M12 21s7-5.4 7-12A7 7 0 0 0 5 9c0 6.6 7 12 7 12Z"></path><circle cx="12" cy="9" r="2.5"></circle></svg><span>距離 ${escapeHTML(clinic.distance)}</span></div>`);
+        }
         const openDetail = () => openClinicDetailPage(card.dataset.clinic, "home");
-        card.addEventListener("click", openDetail);
+        card.addEventListener("click", (event) => {
+          if (event.target.closest("[data-follow-clinic]")) return;
+          openDetail();
+        });
         card.addEventListener("keydown", (event) => {
+          if (event.target.closest("[data-follow-clinic]")) return;
           if (event.key === "Enter" || event.key === " ") {
             event.preventDefault();
             openDetail();
           }
+        });
+      });
+      homeClinicList.querySelectorAll("[data-follow-clinic]").forEach((button) => {
+        button.addEventListener("click", (event) => {
+          event.stopPropagation();
+          toggleClinicFollow(button.dataset.followClinic);
         });
       });
     }
@@ -2609,8 +3937,17 @@
       practiceDoctorName.value = "";
       practiceLicenseNo.value = "";
       practiceSpecialty.value = "牙科";
-      practiceClinicName.value = "";
+      practicePhoto.value = "";
+      practicePhotoData.value = "";
       practiceNote.value = "";
+    }
+
+    function normalizeDoctorPracticeFormLabels() {
+      const photoLabel = practicePhoto?.closest(".field")?.querySelector("label");
+      if (photoLabel) {
+        photoLabel.setAttribute("for", "practicePhoto");
+        photoLabel.textContent = "上傳我的照片";
+      }
     }
 
     function fillDoctorPracticeForm(card) {
@@ -2618,7 +3955,8 @@
       practiceDoctorName.value = card.doctorName;
       practiceLicenseNo.value = card.licenseNo;
       practiceSpecialty.value = card.specialty || "其他";
-      practiceClinicName.value = card.clinicName;
+      practicePhoto.value = "";
+      practicePhotoData.value = card.photo || "";
       practiceNote.value = card.note || "";
     }
 
@@ -2638,11 +3976,11 @@
     function renderDoctorPracticeCards() {
       doctorPracticeList.innerHTML = doctorPracticeCards.map((card) => `
         <article class="doctor-practice-card">
-          <img class="doctor-practice-avatar" src="https://i.pravatar.cc/96?u=${escapeHTML(card.id)}" alt="${escapeHTML(card.doctorName)}">
+          <img class="doctor-practice-avatar" src="${escapeHTML(card.photo || `https://i.pravatar.cc/96?u=${encodeURIComponent(card.id)}`)}" alt="${escapeHTML(card.doctorName)}">
           <div>
             <h3>本人</h3>
             <p>${escapeHTML(card.doctorName)}</p>
-            <p>${escapeHTML(card.specialty)} / ${escapeHTML(card.clinicName)}</p>
+            <p>${escapeHTML(card.specialty)}</p>
             <p>${escapeHTML(card.licenseNo)}</p>
           </div>
           <div class="doctor-practice-actions">
@@ -3260,7 +4598,7 @@
       detailAbout.textContent = clinic.about;
       detailRating.textContent = clinic.rating;
       detailReviews.textContent = clinic.reviews;
-      detailDistance.textContent = clinic.distance;
+      detailDistance.textContent = getClinicDistanceById(clinicId, clinic) || clinic.distance;
       doctorList.innerHTML = clinic.doctors.map(([name, specialty], index) => `
         <article class="doctor-card">
           <img class="doctor-avatar" src="https://i.pravatar.cc/96?img=${index + 12}" alt="${name}">
@@ -3330,6 +4668,19 @@
     });
     inviteTeamDoctor.addEventListener("click", () => openInviteDoctors(activeTeamClinicId, "clinicDoctorTeam"));
     newDoctorPractice.addEventListener("click", () => openDoctorPracticeEditor());
+    normalizeDoctorPracticeFormLabels();
+    practicePhoto.addEventListener("change", () => {
+      const file = practicePhoto.files?.[0];
+      if (!file) {
+        practicePhotoData.value = "";
+        return;
+      }
+      const reader = new FileReader();
+      reader.addEventListener("load", () => {
+        practicePhotoData.value = String(reader.result || "");
+      });
+      reader.readAsDataURL(file);
+    });
     newOpenedClinic.addEventListener("click", () => openOpenedClinicEditor());
     cancelOpenedClinic.addEventListener("click", openOpenedClinics);
     backToScheduleEdit.addEventListener("click", () => {
@@ -3664,12 +5015,13 @@
         doctorName: practiceDoctorName.value.trim(),
         licenseNo: practiceLicenseNo.value.trim(),
         specialty: practiceSpecialty.value,
-        clinicName: practiceClinicName.value.trim(),
+        clinicName: "",
+        photo: practicePhotoData.value,
         note: practiceNote.value.trim(),
         createdAt: new Date().toISOString()
       };
 
-      if (!practiceCard.doctorName || !practiceCard.licenseNo || !practiceCard.clinicName) return;
+      if (!practiceCard.doctorName || !practiceCard.licenseNo) return;
 
       const existingIndex = doctorPracticeCards.findIndex((card) => card.id === practiceCard.id);
       if (existingIndex >= 0) doctorPracticeCards[existingIndex] = practiceCard;
@@ -3690,6 +5042,7 @@
         }
       }
       saveDoctorPracticeCards();
+      renderHomeClinics();
       renderInviteDoctors();
       notices.unshift({
         id: createId(),
@@ -3715,6 +5068,78 @@
     bookingModal.addEventListener("click", (event) => {
       if (event.target === bookingModal) closeBookingModal();
     });
+    setUserAddress.addEventListener("click", setUserLocationFromAddress);
+    homeSearchInput.addEventListener("input", renderHomeClinics);
+    const commonCategories = ["我的關注", "心臟科", "眼科", "小兒科", "皮膚科", "牙科"];
+    const categoryContainer = document.querySelector(".categories");
+    if (categoryContainer && categoryContainer.querySelectorAll(".cat").length < commonCategories.length) {
+      const followButton = document.createElement("button");
+      followButton.className = "cat";
+      followButton.type = "button";
+      followButton.innerHTML = '<span class="cat-icon"><svg viewBox="0 0 24 24"><path d="M19 21 12 17 5 21V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2Z"></path></svg></span>';
+      categoryContainer.prepend(followButton);
+    }
+    document.querySelectorAll(".categories .cat").forEach((button, index) => {
+      const category = commonCategories[index] || button.textContent.trim();
+      button.dataset.categoryFilter = category;
+      const icon = button.querySelector(".cat-icon");
+      button.innerHTML = "";
+      if (icon) button.appendChild(icon);
+      button.append(category);
+      button.addEventListener("click", () => {
+        activeCategoryFilter = activeCategoryFilter === category ? "" : category;
+        document.querySelectorAll(".categories .cat").forEach((item) => {
+          item.classList.toggle("active", item.dataset.categoryFilter === activeCategoryFilter);
+        });
+        renderHomeClinics();
+      });
+    });
+    userAddressInput.addEventListener("keydown", (event) => {
+      if (event.key === "Enter") {
+        event.preventDefault();
+        setUserLocationFromAddress();
+      }
+    });
+    createLocationSelectionPage();
+    createLocationMapModal();
+    homeLocation.setAttribute("role", "button");
+    homeLocation.setAttribute("tabindex", "0");
+    homeLocation.addEventListener("click", openLocationSelectionPage);
+    homeLocation.addEventListener("keydown", (event) => {
+      if (event.key === "Enter" || event.key === " ") {
+        event.preventDefault();
+        openLocationSelectionPage();
+      }
+    });
+    backLocationSelect.addEventListener("click", () => showPage("home", { replace: true }));
+    finishLocationSelect.addEventListener("click", () => showPage("home", { replace: true }));
+    applyLocationAddress.addEventListener("click", applyLocationAddressValue);
+    locationAddressInput.addEventListener("keydown", (event) => {
+      if (event.key === "Enter") {
+        event.preventDefault();
+        applyLocationAddressValue();
+      }
+    });
+    locationAddressInput.addEventListener("focus", showLocationHistoryMenu);
+    locationAddressInput.addEventListener("click", toggleLocationHistoryMenu);
+    locationAddressInput.addEventListener("input", showLocationHistoryMenu);
+    locationAddressInput.addEventListener("blur", hideLocationHistoryMenu);
+    locationHistoryMenu.addEventListener("click", (event) => {
+      const option = event.target.closest("[data-location-history]");
+      if (!option) return;
+      locationAddressInput.value = option.dataset.locationHistory;
+      locationHistoryMenu.classList.remove("active");
+      locationAddressInput.focus();
+    });
+    openLocationSelectMap.addEventListener("click", setUserLocationFromSelectionMap);
+    openLocationMap.addEventListener("click", openLocationMapModal);
+    closeLocationMap.addEventListener("click", closeLocationMapModal);
+    cancelLocationMap.addEventListener("click", closeLocationMapModal);
+    locationMapModal.addEventListener("click", (event) => {
+      if (event.target === locationMapModal) closeLocationMapModal();
+    });
+    locationPickerMap.addEventListener("click", previewUserLocationFromMap);
+    confirmLocationMap.addEventListener("click", confirmUserLocationFromMap);
     let weekDragStartX = 0;
     let weekDragStartY = 0;
     let weekDragStartLeft = 0;
@@ -3825,6 +5250,10 @@
       }, 900);
     });
 
+    renderUserLocationControls();
+    updateLocationSelectionLabels();
+    setLocationMapPin(userLocation);
+    renderLocationHistoryOptions();
     renderPeople();
     renderHomeClinics();
     renderAppointments();
