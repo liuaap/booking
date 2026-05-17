@@ -655,6 +655,22 @@
       margin: 10px 0 12px;
     }
 
+    .clinic-map-view {
+      height: 320px;
+      margin: 10px 0 12px;
+      overflow: hidden;
+      border: 1px solid #cfe0f7;
+      border-radius: 9px;
+      background: #d8ecf4;
+    }
+
+    .clinic-map-address {
+      color: #53627a;
+      font-size: 13px;
+      font-weight: 750;
+      line-height: 1.45;
+    }
+
     #userLocationMap {
       display: none;
     }
@@ -701,19 +717,41 @@
     }
 
     .distance-row {
-      display: flex;
+      display: inline-flex;
       align-items: center;
+      justify-content: center;
       gap: 6px;
-      margin-top: 5px;
-      color: #53627a;
-      font-size: 12px;
-      font-weight: 800;
+      justify-self: center;
+      min-width: 0;
+      height: 34px;
+      margin-top: 8px;
+      border: 1px solid #d6dbe3;
+      border-radius: 8px;
+      padding: 0 10px;
+      background: rgba(255, 255, 255, .82);
+      color: #637084;
+      font-size: 13px;
+      font-weight: 900;
+      box-shadow: 0 3px 9px rgba(20, 33, 61, .06);
+    }
+
+    .distance-row[role="button"] {
+      width: max-content;
+      font: inherit;
+      cursor: pointer;
     }
 
     .distance-row svg {
-      width: 14px;
-      height: 14px;
+      width: 16px;
+      height: 16px;
       color: var(--green);
+    }
+
+    .distance-row strong {
+      color: var(--green);
+      font-size: 15px;
+      font-weight: 950;
+      white-space: nowrap;
     }
 
     .section-head { margin: 18px 0 12px; }
@@ -770,26 +808,29 @@
     }
 
     .clinic-card {
-      min-height: 94px;
+      position: relative;
+      min-height: 148px;
       display: grid;
-      grid-template-columns: 80px 1fr 22px;
-      gap: 12px;
-      padding: 10px;
-      align-items: center;
+      grid-template-columns: 138px minmax(0, 1fr) 24px;
+      gap: 10px 12px;
+      padding: 12px;
+      align-items: start;
+      border-radius: 14px;
     }
 
-    .photo { width: 80px; height: 74px; border-radius: 8px; object-fit: cover; background: #dbe5f2; }
-    .tag { display: inline-flex; align-items: center; height: 20px; padding: 0 7px; border-radius: 6px; background: var(--blue-soft); color: var(--blue); font-size: 11px; font-weight: 800; margin-left: 6px; }
-    .clinic-main { min-width: 0; }
-    .clinic-main h3 { margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .clinic-main .tag { margin: 0 0 6px; }
-    .rating { display: flex; gap: 5px; align-items: center; color: #f5a623; font-size: 12px; font-weight: 800; margin-bottom: 5px; }
-    .rating span, .address, .muted { color: var(--muted); font-size: 12px; font-weight: 600; }
-    .address { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 172px; }
-    .bookmark { align-self: start; color: #9aa6b8; }
+    .clinic-card .photo { width: 138px; height: 124px; border-radius: 12px; object-fit: cover; background: #dbe5f2; }
+    .tag { display: inline-flex; align-items: center; height: 26px; padding: 0 10px; border-radius: 10px; background: var(--blue-soft); color: var(--blue); font-size: 14px; font-weight: 900; margin-left: 6px; }
+    .clinic-main { min-width: 0; display: grid; gap: 5px; padding-right: 2px; }
+    .clinic-main h3 { margin: 0; color: #0b2340; font-size: 18px; line-height: 1.18; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .clinic-main .tag { margin: 2px 0 5px; justify-self: start; }
+    .rating { display: flex; gap: 7px; align-items: center; color: #f5a623; font-size: 0; font-weight: 900; margin: 0; }
+    .rating::before { content: "★"; font-size: 16px; }
+    .rating span, .address, .muted { color: var(--muted); font-size: 14px; font-weight: 700; }
+    .address { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; }
+    .bookmark { align-self: start; color: #8ea0b5; }
     .bookmark-btn {
-      width: 24px;
-      height: 30px;
+      width: 28px;
+      height: 34px;
       border: 0;
       padding: 0;
       display: grid;
@@ -798,6 +839,7 @@
       color: #9aa6b8;
       cursor: pointer;
     }
+    .clinic-card .distance-row { margin-top: 3px; justify-self: start; }
     .bookmark-btn.active {
       color: var(--blue);
     }
@@ -954,6 +996,43 @@
     .doctor-practice-actions { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
     .doctor-practice-action { height: 32px; border: 0; background: transparent; color: #111827; font-size: 13px; font-weight: 800; }
     .doctor-practice-action.danger { color: var(--red); }
+    .doctor-profile-page { padding: 0 0 92px; background: #f7f9fc; }
+    .doctor-profile-hero { position: relative; min-height: 178px; padding: 12px 14px 14px; background: linear-gradient(135deg, rgba(237, 244, 255, .82), rgba(255,255,255,.72)), url("https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?auto=format&fit=crop&w=640&q=80") center / cover; }
+    .doctor-profile-nav { display: flex; justify-content: space-between; align-items: center; }
+    .doctor-profile-nav .icon-btn { background: rgba(255,255,255,.92); box-shadow: 0 6px 16px rgba(23,43,77,.12); }
+    .doctor-profile-actions { display: flex; gap: 8px; }
+    .doctor-profile-summary { display: grid; grid-template-columns: 92px minmax(0, 1fr); gap: 14px; align-items: end; margin-top: 42px; }
+    .doctor-profile-photo { width: 92px; height: 92px; border: 4px solid #fff; border-radius: 50%; object-fit: cover; background: #e8edf5; box-shadow: 0 8px 22px rgba(23,43,77,.18); }
+    .doctor-profile-name { display: flex; align-items: center; gap: 6px; margin-bottom: 5px; color: var(--ink); font-size: 22px; font-weight: 950; }
+    .doctor-profile-name span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .doctor-profile-name small { font-size: 12px; font-weight: 900; }
+    .doctor-profile-verify { width: 15px; height: 15px; border-radius: 50%; display: inline-grid; place-items: center; background: var(--blue); color: #fff; font-size: 9px; }
+    .doctor-profile-specialty { color: var(--blue); font-size: 12px; font-weight: 900; }
+    .doctor-profile-meta { display: flex; flex-wrap: wrap; gap: 8px 12px; margin-top: 9px; color: #4f5f76; font-size: 11px; font-weight: 850; }
+    .doctor-profile-rating { margin-top: 9px; color: #f5a623; font-size: 12px; font-weight: 950; }
+    .doctor-profile-section { margin: 8px 8px 0; padding: 12px; border: 1px solid var(--line); border-radius: 9px; background: #fff; box-shadow: 0 5px 16px rgba(23,43,77,.06); }
+    .doctor-profile-section h2 { margin: 0 0 8px; font-size: 14px; }
+    .doctor-profile-section p { color: #53627a; font-size: 12px; font-weight: 750; line-height: 1.55; }
+    .doctor-profile-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+    .doctor-profile-list { display: grid; gap: 7px; margin: 0; padding: 0; list-style: none; color: #53627a; font-size: 12px; font-weight: 800; }
+    .doctor-profile-list li { display: flex; gap: 6px; align-items: flex-start; }
+    .doctor-profile-list li::before { content: "●"; color: var(--blue); font-size: 10px; line-height: 1.5; }
+    .doctor-profile-socials { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; }
+    .doctor-profile-social { min-height: 54px; border: 1px solid var(--line); border-radius: 8px; display: grid; place-items: center; gap: 3px; background: #fff; color: #53627a; font-size: 10px; font-weight: 850; }
+    .doctor-profile-social svg { width: 21px; height: 21px; color: var(--blue); }
+    .doctor-profile-articles { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; }
+    .doctor-profile-article img { width: 100%; aspect-ratio: 1.45; border-radius: 7px; object-fit: cover; background: #e8edf5; }
+    .doctor-profile-article strong { display: block; margin-top: 5px; color: var(--ink); font-size: 10px; line-height: 1.25; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .doctor-profile-article small { color: var(--muted); font-size: 9px; font-weight: 800; }
+    .doctor-profile-review-summary { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 10px; align-items: center; margin-bottom: 10px; }
+    .doctor-profile-review-score { color: #f5a623; font-size: 24px; font-weight: 950; line-height: 1; }
+    .doctor-profile-review-summary p { color: #667085; font-size: 12px; font-weight: 800; }
+    .doctor-profile-reviews { display: grid; gap: 10px; }
+    .doctor-profile-review { display: grid; grid-template-columns: 34px minmax(0, 1fr); gap: 9px; padding-top: 10px; border-top: 1px solid var(--line); }
+    .doctor-profile-review-avatar { width: 34px; height: 34px; border-radius: 50%; display: grid; place-items: center; background: #eaf2ff; color: var(--blue); font-size: 13px; font-weight: 950; }
+    .doctor-profile-review-head { display: flex; justify-content: space-between; gap: 8px; margin-bottom: 4px; color: var(--ink); font-size: 12px; font-weight: 950; }
+    .doctor-profile-review-stars { color: #f5a623; white-space: nowrap; }
+    .doctor-profile-review p { color: #53627a; font-size: 12px; font-weight: 750; line-height: 1.5; }
     .doctor-search-card {
       min-height: 82px;
       display: grid;
@@ -1017,6 +1096,27 @@
     .field input, .field select { height: 42px; }
     .field input[type="file"] { height: auto; padding: 10px 11px; }
     .field textarea { min-height: 88px; padding-top: 10px; resize: vertical; line-height: 1.5; }
+    .photo-upload-row { display: grid; grid-template-columns: 72px minmax(0, 1fr); gap: 10px; align-items: center; }
+    .photo-upload-row input[type="file"] {
+      grid-column: 1 / -1;
+      min-width: 0;
+      max-width: 100%;
+    }
+    .photo-preview {
+      width: 58px;
+      height: 58px;
+      border: 1px solid #cfd7e5;
+      border-radius: 8px;
+      display: none;
+      object-fit: cover;
+      background: #eef2f7;
+    }
+    .photo-preview.active { display: block; }
+    .photo-preview.active + input[type="file"] { grid-column: 2; }
+    .clinic-photo-preview {
+      width: 72px;
+      height: 72px;
+    }
     .form-check { min-height: 46px; display: grid; grid-template-columns: 20px 1fr; gap: 10px; align-items: center; padding: 10px 12px; border: 1px solid var(--line); border-radius: 8px; background: #f8fbff; color: var(--ink); font-size: 14px; font-weight: 850; }
     .form-check input { width: 18px; height: 18px; accent-color: var(--blue); }
     .form-check small { display: block; margin-top: 2px; color: var(--muted); font-size: 11px; font-weight: 750; }
@@ -1029,7 +1129,13 @@
 
     .modal { position: absolute; inset: 0; display: none; align-items: end; background: rgba(20, 33, 61, .34); z-index: 10; }
     .modal.active { display: flex; }
+    .modal.center-dialog { align-items: center; justify-content: center; padding: 18px; }
     .sheet { width: 100%; max-height: 82%; overflow-y: auto; padding: 16px 18px 18px; border-radius: 18px 18px 0 0; background: #fff; box-shadow: 0 -14px 34px rgba(23, 43, 77, .18); }
+    .center-sheet { width: min(100%, 318px); padding: 18px; border-radius: 14px; background: #fff; box-shadow: 0 18px 42px rgba(23, 43, 77, .22); }
+    .center-sheet h2 { margin: 0 0 8px; font-size: 18px; text-align: center; }
+    .center-sheet p { color: #53627a; font-size: 13px; line-height: 1.55; font-weight: 750; text-align: center; }
+    .center-sheet .form-actions { margin-top: 16px; }
+    .center-sheet .danger-confirm { border: 0; background: var(--red); color: #fff; }
     .sheet-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 12px; }
     .sheet-head h2 { margin: 0; font-size: 18px; }
     .schedule-note { margin: 0 -18px 14px; padding: 0 32px 13px; border-bottom: 1px solid var(--line); color: #9aa6b8; font-size: 12px; line-height: 1.45; font-weight: 700; }
@@ -1057,17 +1163,28 @@
     .record-scheduler .slot-options { margin: 22px 18px 10px; }
     .schedule-title { margin: 6px 18px 10px; color: var(--ink); font-size: 17px; font-weight: 900; }
     .schedule-editor { display: grid; gap: 14px; }
-    .page[data-page="cooperationRecordEditor"] { position: relative; padding: 0 8px 96px; background: linear-gradient(135deg, #f3f8ff 0, #eef6ff 180px, #fff 318px); overflow-x: hidden; }
-    .page[data-page="cooperationRecordEditor"] .topbar { position: relative; z-index: 1; min-height: 40px; margin: 12px -2px -2px; display: grid; grid-template-columns: 40px 1fr 40px 40px; gap: 8px; }
+    .page[data-page="cooperationRecordEditor"] { position: relative; padding: 0 8px 96px; background: #f7f9fc; overflow-x: hidden; }
+    .page[data-page="cooperationRecordEditor"]::before {
+      content: "";
+      position: absolute;
+      inset: 0 0 auto;
+      height: 238px;
+      background: linear-gradient(135deg, rgba(237, 244, 255, .82), rgba(255,255,255,.72)), var(--schedule-cover, url("https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?auto=format&fit=crop&w=640&q=80")) center / cover;
+      pointer-events: none;
+    }
+    .page[data-page="cooperationRecordEditor"] .topbar { position: relative; z-index: 1; min-height: 46px; margin: 12px -2px 0; display: grid; grid-template-columns: 40px minmax(0, 1fr) 40px 40px; gap: 8px; align-items: center; }
     .page[data-page="cooperationRecordEditor"] .topbar .icon-btn,
     .schedule-menu,
     .schedule-share { width: 34px; height: 34px; border: 0; border-radius: 50%; display: grid; place-items: center; background: rgba(255, 255, 255, .92); color: var(--ink); box-shadow: 0 8px 20px rgba(23, 43, 77, .08); }
-    .page[data-page="cooperationRecordEditor"] .topbar h1 { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+    .page[data-page="cooperationRecordEditor"] .topbar h1 { min-width: 0; margin: 0; display: block; color: var(--ink); line-height: 1.2; }
+    .page[data-page="cooperationRecordEditor"] .topbar h1 strong { display: block; min-width: 0; color: var(--blue); font-size: 13px; font-weight: 950; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .page[data-page="cooperationRecordEditor"] .topbar h1 small { display: block; min-width: 0; margin-top: 3px; color: #667085; font-size: 11px; font-weight: 800; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .schedule-share { grid-column: 3; }
     .schedule-menu { grid-column: 4; font-size: 20px; font-weight: 950; line-height: 1; }
     .schedule-editor { position: relative; z-index: 1; }
-    .schedule-page-head { display: grid; grid-template-columns: 88px minmax(0, 1fr); column-gap: 18px; row-gap: 8px; align-items: start; margin: 0 14px 14px; }
-    .schedule-doctor-photo { grid-row: 1 / 4; width: 88px; height: 88px; border-radius: 50%; background: #d8d8d8; overflow: hidden; }
+    .schedule-page-head { display: grid; grid-template-columns: 92px minmax(0, 1fr); gap: 14px; align-items: end; margin: 42px 6px 14px; border: 0; background: transparent; color: inherit; text-align: left; cursor: pointer; }
+    .schedule-page-head:focus-visible { outline: 3px solid rgba(37, 111, 230, .32); outline-offset: 5px; border-radius: 12px; }
+    .schedule-doctor-photo { width: 92px; height: 92px; border: 4px solid #fff; border-radius: 50%; object-fit: cover; background: #e8edf5; box-shadow: 0 8px 22px rgba(23,43,77,.18); }
     .schedule-doctor-main { display: grid; gap: 8px; min-width: 0; padding-top: 10px; }
     .schedule-doctor-line { display: flex; align-items: center; gap: 7px; min-width: 0; color: #1A1A1A; font-size: 28px; font-weight: 700; line-height: 1.12; white-space: nowrap; }
     .schedule-doctor-line strong { min-width: 0; overflow: hidden; text-overflow: ellipsis; }
@@ -1080,15 +1197,28 @@
     .schedule-location-card { grid-column: 1 / -1; min-height: 54px; display: grid; grid-template-columns: 18px minmax(0, 1fr) auto; gap: 8px; align-items: center; margin-top: 1px; padding: 8px 10px; border: 1px solid #9fc1ff; border-radius: 7px; background: rgba(255, 255, 255, .72); }
     .schedule-location-card svg { width: 17px; height: 17px; color: var(--blue); fill: currentColor; }
     .schedule-location-card strong { display: block; min-width: 0; color: var(--blue); font-size: 12px; font-weight: 950; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .schedule-location-card strong:empty { display: none; }
     .schedule-location-card small { display: block; margin-top: 3px; color: #667085; font-size: 11px; font-weight: 800; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .schedule-room-btn { height: 30px; padding: 0 8px; border: 1px solid var(--blue); border-radius: 6px; background: #fff; color: var(--blue); font-size: 11px; font-weight: 900; white-space: nowrap; }
-    .schedule-precautions { min-height: 96px; display: grid; grid-template-columns: minmax(0, 1fr) 92px; gap: 10px; align-items: center; margin: 0 0 14px; padding: 12px 12px 12px 14px; border-radius: 8px; background: #eef5ff; overflow: hidden; }
-    .schedule-precautions-head { display: flex; align-items: center; gap: 7px; margin-bottom: 10px; color: var(--ink); font-size: 13px; font-weight: 950; }
-    .schedule-precautions-info { width: 17px; height: 17px; border-radius: 50%; display: inline-grid; place-items: center; background: var(--blue); color: #fff; font-size: 12px; font-weight: 950; }
-    .schedule-precautions-list { display: grid; grid-template-columns: 1fr 1fr; gap: 9px 14px; margin: 0; padding: 0; list-style: none; color: #596579; font-size: 12px; font-weight: 850; line-height: 1.25; }
-    .schedule-precautions-list li { display: grid; grid-template-columns: 14px minmax(0, 1fr); gap: 6px; align-items: start; min-width: 0; }
-    .schedule-precautions-list li::before { content: ""; width: 14px; height: 14px; border-radius: 50%; background: #fff; box-shadow: inset 0 0 0 1px rgba(207, 215, 229, .65); }
-    .schedule-precautions img { width: 86px; height: 76px; justify-self: end; object-fit: contain; }
+    .schedule-precautions { position: relative; min-height: 76px; display: block; margin: 0 0 14px; padding: 14px 128px 13px 14px; border-left: 4px solid var(--blue); border-radius: 7px; background: #fff; box-shadow: 0 8px 20px rgba(23, 43, 77, .06); overflow: hidden; }
+    .schedule-precautions-copy { min-width: 0; }
+    .schedule-precautions-head { display: block; margin-bottom: 5px; }
+    .schedule-precautions-title { margin: 0; color: var(--ink); font-size: 17px; font-weight: 950; line-height: 1.15; }
+    .schedule-precautions-subtitle { margin: 0; color: #7f8ba0; font-size: 12px; font-weight: 850; line-height: 1.3; }
+    .schedule-precautions-room { position: absolute; top: 15px; right: 12px; max-width: 172px; color: #3c68ba; font-size: 12px; font-weight: 900; line-height: 1.2; text-align: right; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .schedule-precautions-pill { position: absolute; right: 10px; bottom: 13px; min-height: 30px; border: 0; display: inline-flex; align-items: center; gap: 5px; padding: 0 8px; border-radius: 3px; background: #eef5ff; color: #3c68ba; font-size: 11px; font-weight: 700; white-space: nowrap; box-shadow: inset 0 0 0 1px rgba(187, 211, 255, .58); cursor: pointer; }
+    .schedule-precautions-pill svg { width: 19px; height: 19px; color: var(--blue); stroke: currentColor; fill: none; stroke-width: 2.3; stroke-linecap: round; stroke-linejoin: round; }
+    .precautions-detail-card { min-height: 126px; display: grid; grid-template-columns: minmax(0, 1fr) 92px; gap: 12px; align-items: center; margin: 4px 0 18px; padding: 13px 12px; border-radius: 7px; background: #eef5ff; }
+    .precautions-detail-head { display: flex; align-items: center; gap: 7px; margin-bottom: 11px; color: var(--ink); font-size: 13px; font-weight: 950; }
+    .precautions-detail-info { width: 16px; height: 16px; border-radius: 50%; display: inline-grid; place-items: center; background: var(--blue); color: #fff; font-size: 11px; font-weight: 950; }
+    .precautions-detail-doctor { display: block; margin: -6px 0 10px 23px; color: #667085; font-size: 11px; font-weight: 850; }
+    .precautions-detail-list { display: grid; grid-template-columns: 1fr 1fr; gap: 10px 14px; margin: 0; padding: 0; list-style: none; color: #4f5f76; font-size: 12px; font-weight: 850; line-height: 1.3; }
+    .precautions-detail-list li { display: grid; grid-template-columns: 13px minmax(0, 1fr); gap: 7px; align-items: start; min-width: 0; }
+    .precautions-detail-list li::before { content: ""; width: 13px; height: 13px; margin-top: 1px; border-radius: 50%; background: #fff; box-shadow: inset 0 0 0 1px rgba(207, 215, 229, .86); }
+    .precautions-detail-card img { width: 86px; height: 82px; justify-self: end; object-fit: contain; }
+    .precautions-understood { width: max-content; margin: 0 0 70px 27px; border: 0; background: transparent; color: var(--ink); font-size: 13px; font-weight: 750; }
+    .precautions-understood input { width: 20px; height: 20px; margin: 0 10px 0 0; accent-color: var(--blue); vertical-align: middle; }
+    .precautions-return { width: 40px; height: 40px; border: 0; border-radius: 50%; display: grid; place-items: center; margin: 0 auto; background: #1398c8; color: #fff; font-size: 13px; font-weight: 850; }
     .schedule-editor .week-strip { width: 100%; max-width: 100%; margin: 0 0 20px; padding: 8px 6px 12px; border: 1px solid var(--line); border-radius: 14px; box-shadow: var(--shadow); display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 4px; overflow: visible; cursor: default; }
     .schedule-editor .day-cell { min-width: 0; width: 100%; gap: 4px; border-radius: 10px; padding: 8px 0 7px; }
     .schedule-editor .day-cell.active { position: relative; background: #e7f0ff; color: var(--blue); }
@@ -1219,6 +1349,9 @@
     .patient-options { display: grid; gap: 10px; margin: 14px 0; }
     .patient-option { min-height: 58px; display: grid; grid-template-columns: 1fr auto; gap: 10px; align-items: center; padding: 12px; border: 1px solid var(--line); border-radius: 10px; background: #f8fbff; font-weight: 800; }
     .patient-choice { display: grid; grid-template-columns: 22px 1fr; gap: 10px; align-items: center; min-width: 0; }
+    .booking-precautions { display: grid; gap: 12px; margin: 16px 0; }
+    .booking-precautions-actions { display: flex; justify-content: flex-end; }
+    .booking-precautions[hidden] { display: none; }
     .patient-edit { border: 0; background: transparent; color: #33435c; font-size: 12px; font-weight: 800; }
     .visit-status-button { min-height: 34px; border: 0; padding: 0; background: transparent; text-align: right; cursor: pointer; display: inline-grid; align-items: center; justify-items: end; }
     .visit-status-button .visit-status { pointer-events: none; }
@@ -1349,7 +1482,9 @@
             <button class="icon-btn" id="backCooperationRecord" aria-label="回到帳戶">
               <svg viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"></path></svg>
             </button>
-            <h1 id="cooperationRecordTitle">行程表</h1>
+            <h1 id="cooperationRecordTitle">
+              <strong id="cooperationTopClinicName">台中惠文康博診所</strong>
+            </h1>
             <button class="schedule-share" type="button" aria-label="分享">
               <svg viewBox="0 0 24 24"><path d="M4 12v7a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-7"></path><path d="m16 6-4-4-4 4"></path><path d="M12 2v14"></path></svg>
             </button>
@@ -1366,37 +1501,27 @@
             <input id="cooperationRecordNote" type="hidden">
 
             <div id="scheduleEditStep">
-              <div class="schedule-page-head">
-                <div class="schedule-doctor-photo" id="cooperationDoctorPhoto" role="img" aria-label="醫師照片"></div>
-                <div class="schedule-doctor-main">
-                  <div class="schedule-doctor-line">
-                    <strong id="cooperationScheduleDoctorName">王志明</strong>
-                    <em>醫師</em>
-                    <span class="verified-dot">✓</span>
-                  </div>
-                  <div class="schedule-specialty" id="cooperationScheduleSpecialty">心臟內科專科醫師</div>
-                  <div class="schedule-doctor-meta">
-                    <span><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"></circle><path d="m9 12 2 2 4-5"></path></svg>20 年臨床經驗</span>
-                    <span><svg viewBox="0 0 24 24"><path d="M6 21V8l6-4 6 4v13"></path><path d="M9 21v-6h6v6"></path><path d="M10 10h4"></path></svg>台大醫院主治醫師</span>
-                  </div>
-                  <div class="schedule-location-card">
-                    <svg viewBox="0 0 24 24"><path d="M12 21s7-5.1 7-12A7 7 0 0 0 5 9c0 6.9 7 12 7 12Z"></path><circle cx="12" cy="9" r="2.2" fill="#fff"></circle></svg>
-                    <span><strong id="cooperationScheduleClinicName">台中惠文康博診所 2F 診間 212</strong><small id="cooperationScheduleClinicAddress">台中市屯區惠文路 XXX 號</small></span>
-                    <button class="schedule-room-btn" type="button">診間資訊</button>
-                  </div>
-                </div>
-              </div>
-              <section class="schedule-precautions" aria-label="就診注意事項">
+              <button class="schedule-page-head" type="button" id="openScheduleDoctorProfile" aria-label="開啟醫師形象頁">
+                <img class="schedule-doctor-photo doctor-profile-photo" id="cooperationDoctorPhoto" alt="醫師照片">
                 <div>
-                  <div class="schedule-precautions-head"><span class="schedule-precautions-info">i</span>就診注意事項</div>
-                  <ul class="schedule-precautions-list">
-                    <li>請攜帶健保卡</li>
-                    <li>若需檢查請空腹 8 小時</li>
-                    <li>初診請提早 10 分鐘報到</li>
-                    <li>慢性病回診請攜帶用藥紀錄或藥袋</li>
-                  </ul>
+                  <div class="doctor-profile-name"><span id="cooperationScheduleDoctorName">王志明</span><small>醫師</small><em class="doctor-profile-verify">✓</em></div>
+                  <div class="doctor-profile-specialty" id="cooperationScheduleSpecialty">心臟內科專科醫師</div>
+                  <div class="doctor-profile-meta"><span>20 年臨床經驗</span><span id="cooperationScheduleClinicAddress">台大醫院主治醫師</span></div>
+                  <div class="doctor-profile-rating">★ 4.9 <span class="muted">(328 則評論)</span></div>
                 </div>
-                <img src="images/Precautions%20for%20medical%20treatment.png" alt="">
+              </button>
+              <section class="schedule-precautions" aria-label="約診狀況與就診注意事項">
+                <div class="schedule-precautions-copy">
+                  <div class="schedule-precautions-head">
+                    <h2 class="schedule-precautions-title">約診狀況</h2>
+                    <div class="schedule-precautions-room">診間:<span id="cooperationScheduleClinicName">2F103間 1號大樓</span></div>
+                  </div>
+                  <p class="schedule-precautions-subtitle">以下為醫師未來 7 天看診狀況</p>
+                </div>
+                <button class="schedule-precautions-pill" type="button" data-open-precautions>
+                  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 3h7l4 4v13a1 1 0 0 1-1 1H8a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1Z"></path><path d="M15 3v5h5"></path><path d="M10 13h4"></path><path d="M10 17h3"></path><path d="M4 8h4"></path><path d="M4 12h4"></path><circle cx="17" cy="15" r="3"></circle><path d="m15.8 15 1 1 1.7-2"></path></svg>
+                  <span>就診注意事項</span>
+                </button>
               </section>
               <div class="week-strip" id="cooperationWeekStrip"></div>
               <div class="schedule-dashboard">
@@ -1536,8 +1661,8 @@
           </div>
           <div class="account-list">
             <article class="account-card" data-account-action="profile" role="button" tabindex="0"><span class="account-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"></circle><path d="M4 21a8 8 0 0 1 16 0"></path></svg></span><div><h3>預約成員資料</h3><span class="muted">管理本人與家人的就診資料</span></div><svg viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"></path></svg></article>
-            <article class="account-card" data-account-action="openedClinics" role="button" tabindex="0"><span class="account-icon"><svg viewBox="0 0 24 24"><path d="M3 21h18"></path><path d="M5 21V7l8-4v18"></path><path d="M19 21V11l-6-4"></path><path d="M9 9h1"></path><path d="M9 13h1"></path><path d="M9 17h1"></path></svg></span><div><h3>開立診所</h3><span class="muted">管理已開立與授權的診所資料</span></div><svg viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"></path></svg></article>
-            <article class="account-card" data-account-action="doctorPracticeCard" role="button" tabindex="0"><span class="account-icon"><svg viewBox="0 0 24 24"><rect x="4" y="3" width="16" height="18" rx="3"></rect><path d="M9 8h6"></path><path d="M12 11v6"></path><path d="M9 14h6"></path></svg></span><div><h3>建立醫師執業卡</h3><span class="muted">建立並管理醫師執業資料</span></div><svg viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"></path></svg></article>
+            <article class="account-card" data-account-action="openedClinics" role="button" tabindex="0"><span class="account-icon"><svg viewBox="0 0 24 24"><path d="M3 21h18"></path><path d="M5 21V7l8-4v18"></path><path d="M19 21V11l-6-4"></path><path d="M9 9h1"></path><path d="M9 13h1"></path><path d="M9 17h1"></path></svg></span><div><h3>我的診所</h3><span class="muted">管理已開立與授權的診所資料</span></div><svg viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"></path></svg></article>
+            <article class="account-card" data-account-action="doctorPracticeCard" role="button" tabindex="0"><span class="account-icon"><svg viewBox="0 0 24 24"><rect x="4" y="3" width="16" height="18" rx="3"></rect><path d="M9 8h6"></path><path d="M12 11v6"></path><path d="M9 14h6"></path></svg></span><div><h3>我的形像專頁</h3><span class="muted">建立並管理醫師執業資料</span></div><svg viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"></path></svg></article>
           </div>
           <div class="cooperation-list" id="cooperationClinicList"></div>
         </section>
@@ -1598,6 +1723,14 @@
 
           <form class="form-panel" id="openedClinicForm">
             <input type="hidden" id="openedClinicId">
+            <div class="field">
+              <label for="openedClinicImage">診所圖片</label>
+              <div class="photo-upload-row">
+                <img class="photo-preview clinic-photo-preview" id="openedClinicImagePreview" alt="診所圖片預覽">
+                <input id="openedClinicImage" type="file" accept="image/*">
+              </div>
+              <input id="openedClinicImageData" type="hidden">
+            </div>
             <div class="field doctor-photo-field">
               <label for="openedClinicName">診所名稱</label>
               <input id="openedClinicName" required>
@@ -1653,6 +1786,65 @@
           <div class="doctor-practice-list" id="doctorPracticeList"></div>
         </section>
 
+        <section class="page doctor-profile-page" data-page="doctorPracticeProfile">
+          <div class="doctor-profile-hero">
+            <div class="doctor-profile-nav">
+              <button class="icon-btn" id="backDoctorPracticeProfile" aria-label="回到醫師資料">
+                <svg viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"></path></svg>
+              </button>
+              <div class="doctor-profile-actions">
+                <button class="icon-btn" type="button" aria-label="分享"><svg viewBox="0 0 24 24"><path d="M4 12v7a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-7"></path><path d="m16 6-4-4-4 4"></path><path d="M12 2v14"></path></svg></button>
+                <button class="icon-btn" type="button" aria-label="更多"><svg viewBox="0 0 24 24"><circle cx="5" cy="12" r="1"></circle><circle cx="12" cy="12" r="1"></circle><circle cx="19" cy="12" r="1"></circle></svg></button>
+              </div>
+            </div>
+            <div class="doctor-profile-summary">
+              <img class="doctor-profile-photo" id="doctorProfilePhoto" alt="醫師照片">
+              <div>
+                <div class="doctor-profile-name"><span id="doctorProfileName">王志明</span><small>醫師</small><em class="doctor-profile-verify">✓</em></div>
+                <div class="doctor-profile-specialty" id="doctorProfileSpecialty">心臟內科專科醫師</div>
+                <div class="doctor-profile-meta"><span>20 年臨床經驗</span><span id="doctorProfileClinic">台大醫院主治醫師</span></div>
+                <div class="doctor-profile-rating">★ 4.9 <span class="muted">(328 則評論)</span></div>
+              </div>
+            </div>
+          </div>
+          <section class="doctor-profile-section">
+            <h2>醫師簡介</h2>
+            <p id="doctorProfileIntro">專注於心血管疾病的預防、診斷與治療，致力於以專業與同理心陪伴每位患者維持心臟健康。</p>
+          </section>
+          <div class="doctor-profile-grid">
+            <section class="doctor-profile-section">
+              <h2>學經歷</h2>
+              <ul class="doctor-profile-list" id="doctorProfileExperience"></ul>
+            </section>
+            <section class="doctor-profile-section">
+              <h2>專業服務</h2>
+              <ul class="doctor-profile-list" id="doctorProfileServices"></ul>
+            </section>
+          </div>
+          <section class="doctor-profile-section">
+            <h2>更多了解醫師</h2>
+            <div class="doctor-profile-socials">
+              <div class="doctor-profile-social"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"></circle><path d="M3 12h18"></path><path d="M12 3a15 15 0 0 1 0 18"></path></svg>官方網站</div>
+              <div class="doctor-profile-social"><svg viewBox="0 0 24 24"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3Z"></path></svg>Facebook</div>
+              <div class="doctor-profile-social"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="5"></rect><circle cx="12" cy="12" r="4"></circle><circle cx="17" cy="7" r="1"></circle></svg>Instagram</div>
+              <div class="doctor-profile-social"><svg viewBox="0 0 24 24"><path d="M22 12s0-4-1-5-5-1-9-1-8 0-9 1-1 5-1 5 0 4 1 5 5 1 9 1 8 0 9-1 1-5 1-5Z"></path><path d="m10 9 5 3-5 3Z"></path></svg>YouTube</div>
+              <div class="doctor-profile-social"><svg viewBox="0 0 24 24"><path d="M4 5h16v14H4Z"></path><path d="M8 9h8"></path><path d="M8 13h5"></path></svg>診療文章</div>
+            </div>
+          </section>
+          <section class="doctor-profile-section">
+            <h2>醫師文章 / 影片</h2>
+            <div class="doctor-profile-articles" id="doctorProfileArticles"></div>
+          </section>
+          <section class="doctor-profile-section">
+            <h2>患者評論</h2>
+            <div class="doctor-profile-review-summary">
+              <div class="doctor-profile-review-score">4.9</div>
+              <p>共 328 則評論，多數患者肯定醫師的說明清楚度與看診耐心。</p>
+            </div>
+            <div class="doctor-profile-reviews" id="doctorProfileReviews"></div>
+          </section>
+        </section>
+
         <section class="page" data-page="doctorPracticeEditor">
           <div class="topbar">
             <button class="icon-btn" id="backDoctorPracticeEditor" aria-label="回到醫師資料">
@@ -1685,13 +1877,20 @@
             </div>
             <div class="field">
               <label for="practiceClinicName">執業診所</label>
-              <input id="practicePhoto" type="file" accept="image/*">
+              <div class="photo-upload-row">
+                <img class="photo-preview" id="practicePhotoPreview" alt="已上傳照片預覽">
+                <input id="practicePhoto" type="file" accept="image/*">
+              </div>
               <input id="practicePhotoData" type="hidden">
             </div>
             <div class="field">
               <label for="practiceNote">備註</label>
               <textarea id="practiceNote" placeholder="例如：門診時段、可開立文件或聯絡方式"></textarea>
             </div>
+            <label class="form-check">
+              <input id="practiceShowOnClinic" type="checkbox">
+              <span>顯示於診所<small>勾選後才會出現在診所的可預約醫師列表。</small></span>
+            </label>
             <div class="form-actions">
               <button class="btn" type="button" id="cancelDoctorPracticeCard">取消</button>
               <button class="primary-btn" type="submit">儲存</button>
@@ -1746,6 +1945,72 @@
           </div>
           <div class="patient-options" id="patientOptions"></div>
           <button class="primary-btn" id="confirmBooking" type="button" style="width:100%">確認預約</button>
+        </div>
+      </div>
+
+      <div class="modal" id="bookingPrecautionsModal" aria-hidden="true">
+        <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="bookingPrecautionsTitle">
+          <div class="sheet-head">
+            <h2 id="bookingPrecautionsTitle">就診注意事項</h2>
+            <button class="icon-btn" id="closeBookingPrecautions" aria-label="關閉">
+              <svg viewBox="0 0 24 24"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg>
+            </button>
+          </div>
+          <section class="precautions-detail-card" aria-label="就診注意事項">
+            <div>
+              <div class="precautions-detail-head"><span class="precautions-detail-info">i</span>就診注意事項</div>
+              <small class="precautions-detail-doctor" id="bookingPrecautionsDoctor"></small>
+              <ul class="precautions-detail-list" id="bookingPrecautionsList">
+                <li>請攜帶健保卡</li>
+                <li>若需檢查請空腹 8 小時</li>
+                <li>初診請提早 10 分鐘報到</li>
+                <li>慢性病回診請攜帶用藥紀錄或藥袋</li>
+              </ul>
+            </div>
+            <img src="images/Precautions%20for%20medical%20treatment.png" alt="">
+          </section>
+          <label class="form-check" for="bookingPrecautionsCheckbox">
+            <input type="checkbox" id="bookingPrecautionsCheckbox">
+            <span>我已了解</span>
+          </label>
+          <div class="form-actions">
+            <button class="btn" type="button" id="cancelBookingPrecautions">取消</button>
+            <button class="primary-btn" type="button" id="acknowledgePrecautions" disabled>下一步</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal center-dialog" id="cancelAppointmentModal" aria-hidden="true">
+        <div class="center-sheet" role="dialog" aria-modal="true" aria-labelledby="cancelAppointmentTitle">
+          <h2 id="cancelAppointmentTitle">確定取消預約？</h2>
+          <p id="cancelAppointmentMessage">取消後此時段會釋出，累計取消次數也會更新。</p>
+          <div class="form-actions">
+            <button class="btn" type="button" id="returnCancelAppointment">返回</button>
+            <button class="primary-btn danger-confirm" type="button" id="confirmCancelAppointment">確定取消</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal" id="schedulePrecautionsModal" aria-hidden="true">
+        <div class="sheet" role="dialog" aria-modal="true" aria-label="就診注意事項">
+          <section class="precautions-detail-card">
+            <div>
+              <div class="precautions-detail-head"><span class="precautions-detail-info">i</span>就診注意事項</div>
+              <small class="precautions-detail-doctor" id="schedulePrecautionsDoctor"></small>
+              <ul class="precautions-detail-list" id="schedulePrecautionsList">
+                <li>請攜帶健保卡</li>
+                <li>若需檢查請空腹 8 小時</li>
+                <li>初診請提早 10 分鐘報到</li>
+                <li>慢性病回診請攜帶用藥紀錄或藥袋</li>
+              </ul>
+            </div>
+            <img src="images/Precautions%20for%20medical%20treatment.png" alt="">
+          </section>
+          <label class="precautions-understood">
+            <input type="checkbox" id="schedulePrecautionsCheckbox">
+            <span>我已了解</span>
+          </label>
+          <button class="precautions-return" id="closeSchedulePrecautions" type="button">返回</button>
         </div>
       </div>
 
@@ -1814,6 +2079,20 @@
             <button class="btn" type="button" id="appendDirectApply">保留原資料增加套用</button>
             <button class="primary-btn" type="button" id="replaceDirectApply">刪除原資料覆蓋套用</button>
           </div>
+        </div>
+      </div>
+
+      <div class="modal" id="clinicMapModal" aria-hidden="true">
+        <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="clinicMapTitle">
+          <div class="sheet-head">
+            <h2 id="clinicMapTitle">診所位置</h2>
+            <button class="icon-btn" id="closeClinicMap" aria-label="關閉">
+              <svg viewBox="0 0 24 24"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg>
+            </button>
+          </div>
+          <p class="clinic-map-address" id="clinicMapAddress"></p>
+          <div class="clinic-map-view" id="clinicMapView"></div>
+          <button class="primary-btn" type="button" id="openExternalClinicMap" style="width:100%">開啟導航</button>
         </div>
       </div>
 
@@ -1915,6 +2194,15 @@
     let locationSelectStatus = null;
     let leafletMap = null;
     let leafletMarker = null;
+    const clinicMapModal = document.querySelector("#clinicMapModal");
+    const clinicMapTitle = document.querySelector("#clinicMapTitle");
+    const clinicMapAddress = document.querySelector("#clinicMapAddress");
+    const clinicMapView = document.querySelector("#clinicMapView");
+    const closeClinicMap = document.querySelector("#closeClinicMap");
+    const openExternalClinicMap = document.querySelector("#openExternalClinicMap");
+    let clinicLeafletMap = null;
+    let clinicLeafletMarker = null;
+    let activeMapClinic = null;
     const backHome = document.querySelector("#backHome");
     const detailCover = document.querySelector("#detailCover");
     const detailName = document.querySelector("#detailName");
@@ -1940,6 +2228,15 @@
     const backCooperationRecord = document.querySelector("#backCooperationRecord");
     const newDoctorPractice = document.querySelector("#newDoctorPractice");
     const doctorPracticeList = document.querySelector("#doctorPracticeList");
+    const doctorProfilePhoto = document.querySelector("#doctorProfilePhoto");
+    const doctorProfileName = document.querySelector("#doctorProfileName");
+    const doctorProfileSpecialty = document.querySelector("#doctorProfileSpecialty");
+    const doctorProfileClinic = document.querySelector("#doctorProfileClinic");
+    const doctorProfileIntro = document.querySelector("#doctorProfileIntro");
+    const doctorProfileExperience = document.querySelector("#doctorProfileExperience");
+    const doctorProfileServices = document.querySelector("#doctorProfileServices");
+    const doctorProfileArticles = document.querySelector("#doctorProfileArticles");
+    const doctorProfileReviews = document.querySelector("#doctorProfileReviews");
     const inviteDoctorsTitle = document.querySelector("#inviteDoctorsTitle");
     const inviteDoctorList = document.querySelector("#inviteDoctorList");
     const clinicDoctorTeamTitle = document.querySelector("#clinicDoctorTeamTitle");
@@ -1952,14 +2249,19 @@
     const practiceLicenseNo = document.querySelector("#practiceLicenseNo");
     const practiceSpecialty = document.querySelector("#practiceSpecialty");
     const practicePhoto = document.querySelector("#practicePhoto");
+    const practicePhotoPreview = document.querySelector("#practicePhotoPreview");
     const practicePhotoData = document.querySelector("#practicePhotoData");
     const practiceNote = document.querySelector("#practiceNote");
+    const practiceShowOnClinic = document.querySelector("#practiceShowOnClinic");
     const cancelDoctorPracticeCard = document.querySelector("#cancelDoctorPracticeCard");
     const newOpenedClinic = document.querySelector("#newOpenedClinic");
     const openedClinicList = document.querySelector("#openedClinicList");
     const openedClinicForm = document.querySelector("#openedClinicForm");
     const openedClinicEditorTitle = document.querySelector("#openedClinicEditorTitle");
     const openedClinicId = document.querySelector("#openedClinicId");
+    const openedClinicImage = document.querySelector("#openedClinicImage");
+    const openedClinicImagePreview = document.querySelector("#openedClinicImagePreview");
+    const openedClinicImageData = document.querySelector("#openedClinicImageData");
     const openedClinicName = document.querySelector("#openedClinicName");
     const openedClinicCategory = document.querySelector("#openedClinicCategory");
     const openedClinicAddress = document.querySelector("#openedClinicAddress");
@@ -1968,6 +2270,7 @@
     const openedClinicShowOnHome = document.querySelector("#openedClinicShowOnHome");
     const cancelOpenedClinic = document.querySelector("#cancelOpenedClinic");
     const cooperationRecordForm = document.querySelector("#cooperationRecordForm");
+    const cooperationRecordPage = document.querySelector('.page[data-page="cooperationRecordEditor"]');
     const cooperationRecordClinicId = document.querySelector("#cooperationRecordClinicId");
     const cooperationRecordClinic = document.querySelector("#cooperationRecordClinic");
     const cooperationRecordDoctor = document.querySelector("#cooperationRecordDoctor");
@@ -1977,12 +2280,14 @@
     const cooperationRecordNote = document.querySelector("#cooperationRecordNote");
     const cooperationRecordTitle = document.querySelector("#cooperationRecordTitle");
     const scheduleEditStep = document.querySelector("#scheduleEditStep");
+    const openScheduleDoctorProfile = document.querySelector("#openScheduleDoctorProfile");
     const scheduleTimeEditStep = document.querySelector("#scheduleTimeEditStep");
     const scheduleApplyDateStep = document.querySelector("#scheduleApplyDateStep");
     const schedulePreviewStep = document.querySelector("#schedulePreviewStep");
     const cooperationDoctorPhoto = document.querySelector("#cooperationDoctorPhoto");
     const cooperationScheduleDoctorName = document.querySelector("#cooperationScheduleDoctorName");
     const cooperationScheduleSpecialty = document.querySelector("#cooperationScheduleSpecialty");
+    const cooperationTopClinicName = document.querySelector("#cooperationTopClinicName");
     const cooperationScheduleClinicName = document.querySelector("#cooperationScheduleClinicName");
     const cooperationScheduleClinicAddress = document.querySelector("#cooperationScheduleClinicAddress");
     const cooperationWeekStrip = document.querySelector("#cooperationWeekStrip");
@@ -2030,6 +2335,10 @@
     const patientOptions = document.querySelector("#patientOptions");
     const addBookingPerson = document.querySelector("#addBookingPerson");
     const confirmBooking = document.querySelector("#confirmBooking");
+    const cancelAppointmentModal = document.querySelector("#cancelAppointmentModal");
+    const cancelAppointmentMessage = document.querySelector("#cancelAppointmentMessage");
+    const returnCancelAppointment = document.querySelector("#returnCancelAppointment");
+    const confirmCancelAppointment = document.querySelector("#confirmCancelAppointment");
     const personModal = document.querySelector("#personModal");
     const closePerson = document.querySelector("#closePerson");
     const cancelPerson = document.querySelector("#cancelPerson");
@@ -2038,6 +2347,7 @@
     const closeDeletePractice = document.querySelector("#closeDeletePractice");
     const cancelDeletePractice = document.querySelector("#cancelDeletePractice");
     const confirmDeletePractice = document.querySelector("#confirmDeletePractice");
+    const deletePracticeTitle = document.querySelector("#deletePracticeTitle");
     const deletePracticeMessage = document.querySelector("#deletePracticeMessage");
     const directApplyModal = document.querySelector("#directApplyModal");
     const closeDirectApply = document.querySelector("#closeDirectApply");
@@ -2072,7 +2382,8 @@
     const emptyDataVersionKey = "clinicAppEmptyDataVersion";
     const emptyDataVersion = "empty-v1";
     const emptyProgressAppointmentsVersionKey = "clinicAppEmptyProgressAppointmentsVersion";
-    const emptyProgressAppointmentsVersion = "empty-progress-appointments-v1";
+    const emptyProgressAppointmentsVersion = "empty-progress-appointments-v2";
+    const defaultClinicImage = "https://images.unsplash.com/photo-1629909613654-28e377c37b09?auto=format&fit=crop&w=160&q=80";
 
     function resetSeedDataForEmptyStart() {
       if (localStorage.getItem(emptyDataVersionKey) === emptyDataVersion) return;
@@ -2112,6 +2423,8 @@
     let inviteReturnPage = "openedClinics";
     let pendingDeletePracticeId = "";
     let pendingDeleteTeamDoctorId = "";
+    let pendingDeleteClinicId = "";
+    let pendingCancelAppointmentId = "";
     let activeVisitStatusAppointmentId = "";
     let activeClinicId = "";
     let clinicDetailReturnPage = "home";
@@ -2119,6 +2432,7 @@
     let pageHistory = [];
     let activeTeamClinicId = "";
     let doctorPracticeReturnPage = "doctorPracticeCard";
+    let doctorProfileReturnPage = "doctorPracticeCard";
 
     const defaultInviteDoctors = [];
 
@@ -2391,6 +2705,59 @@
         name: detail?.name || "",
         address: detail?.address || detail?.about || ""
       });
+    }
+
+    function getClinicMapSummary(clinicId, detail = null) {
+      const openedClinic = openedClinics.find((clinic) => clinic.id === clinicId);
+      const baseClinic = clinics[clinicId];
+      const name = openedClinic?.name || detail?.name || baseClinic?.name || "診所";
+      const address = openedClinic?.address || detail?.address || baseClinic?.address || detail?.about || name;
+      const coords = estimateCoordsFromText(`${address} ${name}`);
+      return { id: clinicId, name, address, coords };
+    }
+
+    function openClinicMapModal(clinicId, detail = null) {
+      const clinic = getClinicMapSummary(clinicId, detail);
+      activeMapClinic = clinic;
+      clinicMapTitle.textContent = clinic.name;
+      clinicMapAddress.textContent = clinic.address;
+      clinicMapModal.classList.add("active");
+      clinicMapModal.setAttribute("aria-hidden", "false");
+      if (!window.L || !clinicMapView) return;
+      const latLng = [clinic.coords.lat, clinic.coords.lng];
+      const markerIcon = L.divIcon({
+        className: "",
+        html: '<span class="map-pin-marker"></span>',
+        iconSize: [26, 26],
+        iconAnchor: [13, 24]
+      });
+      if (!clinicLeafletMap) {
+        clinicLeafletMap = L.map(clinicMapView, {
+          zoomControl: true,
+          attributionControl: true
+        }).setView(latLng, 16);
+        L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+          maxZoom: 19,
+          attribution: "&copy; OpenStreetMap"
+        }).addTo(clinicLeafletMap);
+        clinicLeafletMarker = L.marker(latLng, { icon: markerIcon }).addTo(clinicLeafletMap);
+      } else {
+        clinicLeafletMap.setView(latLng, 16);
+        clinicLeafletMarker.setLatLng(latLng);
+      }
+      requestAnimationFrame(() => clinicLeafletMap.invalidateSize());
+      setTimeout(() => clinicLeafletMap.invalidateSize(), 180);
+    }
+
+    function closeClinicMapModal() {
+      clinicMapModal.classList.remove("active");
+      clinicMapModal.setAttribute("aria-hidden", "true");
+    }
+
+    function openActiveClinicInMaps() {
+      if (!activeMapClinic) return;
+      const query = `${activeMapClinic.name} ${activeMapClinic.address}`;
+      window.open(`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(query)}`, "_blank");
     }
 
     function renderUserLocationControls() {
@@ -2712,10 +3079,20 @@
       localStorage.setItem(scheduleChangesKey, JSON.stringify(scheduleChanges));
     }
 
-    function findAppliedSchedule(doctorName, date) {
+    function getActiveScheduleClinicId() {
+      return cooperationRecordDraft?.clinic?.id || bookingDraft?.clinic?.id || activeClinicId || cooperationRecordClinicId?.value || "";
+    }
+
+    function scheduleChangeMatchesClinic(change, clinicId = getActiveScheduleClinicId()) {
+      if (!clinicId) return false;
+      return change.clinicId === clinicId;
+    }
+
+    function findAppliedSchedule(doctorName, date, clinicId = getActiveScheduleClinicId()) {
       const iso = dateToISO(date);
       return scheduleChanges.find((change) => (
         change.kind === "applyDates" &&
+        scheduleChangeMatchesClinic(change, clinicId) &&
         change.doctorName === doctorName &&
         Array.isArray(change.applyDates) &&
         change.applyDates.includes(iso)
@@ -2754,6 +3131,49 @@
 
     function saveDoctorPracticeCards() {
       localStorage.setItem(doctorPracticeCardsKey, JSON.stringify(doctorPracticeCards));
+    }
+
+    function compressImageDataURL(dataUrl, maxSize = 640, quality = 0.82) {
+      return new Promise((resolve) => {
+        if (!String(dataUrl || "").startsWith("data:image/")) {
+          resolve(dataUrl || "");
+          return;
+        }
+        const image = new Image();
+        image.addEventListener("error", () => resolve(dataUrl));
+        image.addEventListener("load", () => {
+          const scale = Math.min(1, maxSize / Math.max(image.naturalWidth || 1, image.naturalHeight || 1));
+          const width = Math.max(1, Math.round((image.naturalWidth || 1) * scale));
+          const height = Math.max(1, Math.round((image.naturalHeight || 1) * scale));
+          const canvas = document.createElement("canvas");
+          canvas.width = width;
+          canvas.height = height;
+          const context = canvas.getContext("2d");
+          if (!context) {
+            resolve(dataUrl);
+            return;
+          }
+          context.drawImage(image, 0, 0, width, height);
+          resolve(canvas.toDataURL("image/jpeg", quality));
+        });
+        image.src = dataUrl;
+      });
+    }
+
+    function readImageFileAsDataURL(file, maxSize = 640, quality = 0.82) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.addEventListener("error", reject);
+        reader.addEventListener("load", () => {
+          const rawData = String(reader.result || "");
+          if (!file.type.startsWith("image/")) {
+            resolve(rawData);
+            return;
+          }
+          compressImageDataURL(rawData, maxSize, quality).then(resolve);
+        });
+        reader.readAsDataURL(file);
+      });
     }
 
     function clearPersonForm() {
@@ -2836,7 +3256,7 @@
 
     function makeOpenedClinicDetail(clinic) {
       const invitedDoctors = (clinic.invitedDoctors || []).map((doctor) => [
-        doctor.name,
+        (getDoctorPracticeByTeamDoctor(doctor, clinic.id)?.doctorName || doctor.name),
         `${clinic.category || "門診"} / 已加入`
       ]);
 
@@ -2848,7 +3268,10 @@
         distance: "已開立",
         cover: clinic.image,
         about: clinic.note || `${clinic.name} 已加入開立診所清單，可管理診所資料與後續預約。`,
-        doctors: invitedDoctors,
+        doctors: invitedDoctors.filter(([name]) => (clinic.invitedDoctors || []).some((doctor) => {
+          const card = getDoctorPracticeByTeamDoctor(doctor, clinic.id);
+          return card?.showOnClinic === true && (card.doctorName === name || doctor.name === name);
+        })),
         reviewsList: clinic.reviewsList || []
       };
     }
@@ -2896,7 +3319,8 @@
       if (!invitedDoctors.some((doctor) => doctor.id === notice.doctorId)) {
         invitedDoctors.push({
           id: notice.doctorId,
-          name: notice.doctorName
+          name: notice.doctorName,
+          sourceCardId: notice.doctorCardId || ""
         });
         clinic.invitedDoctors = invitedDoctors;
         saveOpenedClinics();
@@ -2928,10 +3352,10 @@
       const doctors = [];
       const openedClinic = openedClinics.find((item) => item.id === clinic.id || item.name === clinic.name);
       (openedClinic?.invitedDoctors || []).forEach((doctor) => {
-        const card = getDoctorPracticeByTeamDoctor(doctor);
+        const card = getDoctorPracticeByTeamDoctor(doctor, openedClinic.id);
         doctors.push(doctor.name, doctor.id, doctor.specialty, card?.doctorName, card?.licenseNo, card?.specialty, card?.note);
       });
-      doctorPracticeCards.forEach((card) => {
+      getBaseDoctorPracticeCards().forEach((card) => {
         if (
           card.clinicId === clinic.id ||
           card.clinicName === clinic.name ||
@@ -2948,7 +3372,7 @@
       if (!clinic || !keyword) return [];
       const openedClinic = openedClinics.find((item) => item.id === clinic.id || item.name === clinic.name);
       const teamCards = (openedClinic?.invitedDoctors || [])
-        .map((doctor) => getDoctorPracticeByTeamDoctor(doctor) || {
+        .map((doctor) => getDoctorPracticeByTeamDoctor(doctor, openedClinic.id) || {
           id: doctor.id,
           doctorName: doctor.name,
           licenseNo: doctor.id,
@@ -2967,7 +3391,9 @@
       const clinicIds = new Set();
       openedClinics.forEach((clinic) => {
         const matches = (clinic.invitedDoctors || []).some((doctor) => (
+          doctor.sourceCardId === card.id ||
           doctor.cardId === card.id ||
+          doctor.clinicCardId === card.id ||
           doctor.id === card.licenseNo ||
           doctor.name === card.doctorName
         ));
@@ -3038,7 +3464,7 @@
           : String(clinic.tag || "").includes(activeCategoryFilter))
         : filteredCards;
       const doctorResultCards = keyword && !activeCategoryFilter
-        ? doctorPracticeCards.filter((card) => [
+        ? getBaseDoctorPracticeCards().filter((card) => [
           card.doctorName,
           card.licenseNo,
           card.specialty,
@@ -3067,15 +3493,19 @@
         const clinic = visibleCards.find((item) => item.id === card.dataset.clinic);
         if (clinic?.distance) {
           const info = card.querySelector("div");
-          info.insertAdjacentHTML("beforeend", `<div class="distance-row"><svg viewBox="0 0 24 24"><path d="M12 21s7-5.4 7-12A7 7 0 0 0 5 9c0 6.6 7 12 7 12Z"></path><circle cx="12" cy="9" r="2.5"></circle></svg><span>距離 ${escapeHTML(clinic.distance)}</span></div>`);
+          info.insertAdjacentHTML("beforeend", `<button class="distance-row" type="button" data-open-clinic-map="${escapeHTML(clinic.id)}"><svg viewBox="0 0 24 24"><path d="M12 21s7-5.4 7-12A7 7 0 0 0 5 9c0 6.6 7 12 7 12Z"></path><circle cx="12" cy="9" r="2.5"></circle></svg><span>距離 ${escapeHTML(clinic.distance)}</span></button>`);
+        }
+        const distanceButton = card.querySelector("[data-open-clinic-map]");
+        if (distanceButton && clinic?.distance) {
+          distanceButton.innerHTML = `<svg viewBox="0 0 24 24"><path d="M12 21s7-5.4 7-12A7 7 0 0 0 5 9c0 6.6 7 12 7 12Z"></path><circle cx="12" cy="9" r="2.5"></circle></svg><span>距離</span><strong>${escapeHTML(clinic.distance)}</strong>`;
         }
         const openDetail = () => openClinicDetailPage(card.dataset.clinic, "home");
         card.addEventListener("click", (event) => {
-          if (event.target.closest("[data-follow-clinic]")) return;
+          if (event.target.closest("[data-follow-clinic], [data-open-clinic-map]")) return;
           openDetail();
         });
         card.addEventListener("keydown", (event) => {
-          if (event.target.closest("[data-follow-clinic]")) return;
+          if (event.target.closest("[data-follow-clinic], [data-open-clinic-map]")) return;
           if (event.key === "Enter" || event.key === " ") {
             event.preventDefault();
             openDetail();
@@ -3088,10 +3518,28 @@
           toggleClinicFollow(button.dataset.followClinic);
         });
       });
+      homeClinicList.querySelectorAll("[data-open-clinic-map]").forEach((button) => {
+        button.addEventListener("click", (event) => {
+          event.stopPropagation();
+          const clinic = visibleCards.find((item) => item.id === button.dataset.openClinicMap);
+          openClinicMapModal(button.dataset.openClinicMap, clinic);
+        });
+      });
     }
 
     function renderAppointments() {
-      appointmentList.innerHTML = appointments.map((appointment) => {
+      const isClinicAdmin = Array.isArray(openedClinics) && openedClinics.length > 0;
+      const myDoctorNames = Array.isArray(doctorPracticeCards) ? getBaseDoctorPracticeCards().map((c) => c.doctorName) : [];
+      let visibleAppointments = appointments;
+      if (myDoctorNames.length > 0) {
+        // doctor account: only show appointments for doctors in "我的醫師資料".
+        visibleAppointments = appointments.filter((a) => myDoctorNames.includes(a.doctorName));
+      } else if (isClinicAdmin) {
+        // clinic admin: see all appointments (no filter)
+        visibleAppointments = appointments;
+      }
+
+      appointmentList.innerHTML = visibleAppointments.map((appointment) => {
         const isDone = appointment.status === "done";
         const isCancelled = appointment.status === "cancelled";
         const statusText = isDone ? "已完成" : (isCancelled ? "已取消" : (appointment.visitStatus === "checkedIn" ? "已報到" : "待看診"));
@@ -3129,7 +3577,7 @@
       appointmentList.querySelectorAll("[data-cancel-appointment]").forEach((button) => {
         button.addEventListener("click", (event) => {
           event.stopPropagation();
-          cancelAppointment(button.dataset.cancelAppointment);
+          openCancelAppointmentModal(button.dataset.cancelAppointment);
         });
       });
 
@@ -3175,6 +3623,27 @@
         selectedPanel: "progress",
         appointmentDetail: true
       });
+    }
+
+    function openCancelAppointmentModal(appointmentId) {
+      const appointment = appointments.find((item) => item.id === appointmentId);
+      if (!appointment || appointment.status === "cancelled") return;
+      pendingCancelAppointmentId = appointmentId;
+      cancelAppointmentMessage.textContent = `確定取消 ${appointment.date} ${appointment.slot} ${appointment.clinicName} 的預約？取消後此時段會釋出。`;
+      cancelAppointmentModal.classList.add("active");
+      cancelAppointmentModal.setAttribute("aria-hidden", "false");
+    }
+
+    function closeCancelAppointmentModal() {
+      pendingCancelAppointmentId = "";
+      cancelAppointmentModal.classList.remove("active");
+      cancelAppointmentModal.setAttribute("aria-hidden", "true");
+    }
+
+    function confirmPendingCancelAppointment() {
+      const appointmentId = pendingCancelAppointmentId;
+      closeCancelAppointmentModal();
+      if (appointmentId) cancelAppointment(appointmentId);
     }
 
     function cancelAppointment(appointmentId) {
@@ -3237,41 +3706,46 @@
     function getPrimaryCooperationDoctor(clinic) {
       const doctor = (clinic.invitedDoctors || [])[0];
       if (!doctor) return "合作醫師";
-      const card = getDoctorPracticeByTeamDoctor(doctor);
+      const card = getDoctorPracticeByTeamDoctor(doctor, clinic.id);
       return card?.doctorName || doctor.name || "合作醫師";
     }
 
+    function getCooperationDoctorPhoto(clinic, doctorName) {
+      const teamDoctor = (clinic.invitedDoctors || []).find((doctor) => {
+        const card = getDoctorPracticeByTeamDoctor(doctor, clinic.id);
+        return doctor.name === doctorName || card?.doctorName === doctorName;
+      });
+      const card = teamDoctor ? getDoctorPracticeByTeamDoctor(teamDoctor, clinic.id) : doctorPracticeCards.find((item) => item.clinicId === clinic.id && item.doctorName === doctorName) || getBaseDoctorPracticeCards().find((item) => item.doctorName === doctorName);
+      return card?.photo || `https://i.pravatar.cc/160?u=${encodeURIComponent(card?.id || doctorName)}`;
+    }
+
+    function getCooperationDoctorProfileCard() {
+      if (!cooperationRecordDraft) return null;
+      const clinic = cooperationRecordDraft.clinic;
+      const doctorName = cooperationRecordDraft.doctorName;
+      const teamDoctor = (clinic.invitedDoctors || []).find((doctor) => {
+        const card = getDoctorPracticeByTeamDoctor(doctor, clinic.id);
+        return doctor.name === doctorName || card?.doctorName === doctorName;
+      });
+      const card = teamDoctor ? getDoctorPracticeByTeamDoctor(teamDoctor, clinic.id) : doctorPracticeCards.find((item) => item.clinicId === clinic.id && item.doctorName === doctorName) || getBaseDoctorPracticeCards().find((item) => item.doctorName === doctorName);
+      return {
+        id: card?.id || teamDoctor?.id || doctorName,
+        doctorName: card?.doctorName || doctorName,
+        licenseNo: card?.licenseNo || teamDoctor?.licenseNo || teamDoctor?.id || "未填寫",
+        specialty: cooperationRecordDraft.specialty || card?.specialty || clinic.category || "門診",
+        clinicName: card?.clinicName || clinic.name,
+        photo: card?.photo || getCooperationDoctorPhoto(clinic, doctorName),
+        note: card?.note || ""
+      };
+    }
+
+    function openCurrentScheduleDoctorProfile() {
+      const card = getCooperationDoctorProfileCard();
+      if (card) openDoctorPracticeProfile(card, "cooperationRecordEditor");
+    }
+
     function renderCooperationClinics() {
-      const cooperationClinics = getCooperationClinics();
-      cooperationClinicList.innerHTML = cooperationClinics.map((clinic) => `
-        <article class="cooperation-card" role="button" tabindex="0" data-cooperation-clinic="${escapeHTML(clinic.id)}" aria-label="查看${escapeHTML(clinic.name)}個人詳情">
-          <img src="${escapeHTML(clinic.image)}" alt="${escapeHTML(clinic.name)}">
-          <div class="cooperation-main">
-            <h3>${escapeHTML(clinic.name)}</h3>
-            <p>${escapeHTML(clinic.address)}</p>
-            <div class="cooperation-meta">合作醫師：${escapeHTML(getPrimaryCooperationDoctor(clinic))}</div>
-          </div>
-          <svg viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"></path></svg>
-          <button class="cooperation-action" type="button" data-cooperation-record="${escapeHTML(clinic.id)}">填寫預約紀錄表</button>
-        </article>
-      `).join("");
-
-      cooperationClinicList.querySelectorAll("[data-cooperation-clinic]").forEach((card) => {
-        activateOnEnterOrSpace(card, () => {
-          openClinicDetailPage(card.dataset.cooperationClinic, "account");
-        });
-      });
-
-      cooperationClinicList.querySelectorAll("[data-cooperation-record]").forEach((button) => {
-        button.addEventListener("click", (event) => {
-          event.stopPropagation();
-          const clinic = openedClinics.find((item) => item.id === button.dataset.cooperationRecord);
-          if (clinic) openCooperationRecordEditor(clinic, null, {
-            selectedPanel: "progress",
-            source: "staffRecord"
-          });
-        });
-      });
+      cooperationClinicList.innerHTML = "";
     }
 
     function parseAppointmentDate(dateText) {
@@ -3288,12 +3762,15 @@
       cooperationRecordClinicId.value = clinic.id;
       cooperationRecordClinic.value = clinic.name;
       cooperationRecordDoctor.value = doctorName;
-      cooperationRecordTitle.textContent = `${clinic.name}預約表`;
-      cooperationDoctorPhoto.style.backgroundImage = "";
+      cooperationRecordTitle.setAttribute("aria-label", `${clinic.name}預約表`);
+      cooperationDoctorPhoto.src = getCooperationDoctorPhoto(clinic, doctorName);
+      cooperationDoctorPhoto.alt = `${doctorName}醫師照片`;
       cooperationScheduleDoctorName.textContent = doctorName.replace(/醫師$/, "");
       cooperationScheduleSpecialty.textContent = `${options.specialty || appointment?.specialty || clinic.category || "門診"}專科醫師`;
-      cooperationScheduleClinicName.textContent = `${clinic.name} 2F 診間 212`;
-      cooperationScheduleClinicAddress.textContent = clinic.address || "台中市屯區惠文路 XXX 號";
+      cooperationTopClinicName.textContent = clinic.name;
+      cooperationScheduleClinicName.textContent = "2F103間 1號大樓";
+      cooperationScheduleClinicAddress.textContent = `${clinic.name}主治醫師`;
+      cooperationRecordPage?.style.setProperty("--schedule-cover", `url("${clinic.image || "https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?auto=format&fit=crop&w=640&q=80"}")`);
       cooperationRecordPatient.value = appointment?.patientName || people[0]?.name || "";
       cooperationRecordNote.value = "";
       today.setHours(0, 0, 0, 0);
@@ -3344,9 +3821,9 @@
 
     function showScheduleStep(step) {
       const clinicName = cooperationRecordClinic.value || "診所";
-      cooperationRecordTitle.textContent = step === "preview" ? "預覽變更" : `${clinicName}預約表`;
-      if (step === "timeEdit") cooperationRecordTitle.textContent = "編輯時段";
-      if (step === "applyDate") cooperationRecordTitle.textContent = "套用日期";
+      cooperationRecordTitle.setAttribute("aria-label", step === "preview" ? `${clinicName}預覽變更` : `${clinicName}預約表`);
+      if (step === "timeEdit") cooperationRecordTitle.setAttribute("aria-label", `${clinicName}編輯時段`);
+      if (step === "applyDate") cooperationRecordTitle.setAttribute("aria-label", `${clinicName}套用日期`);
       scheduleEditStep.style.display = step === "edit" ? "" : "none";
       scheduleTimeEditStep.style.display = step === "timeEdit" ? "" : "none";
       scheduleApplyDateStep.style.display = step === "applyDate" ? "" : "none";
@@ -3531,10 +4008,11 @@
       renderCooperationRecordSchedule();
     }
 
-    function getExistingEnabledTimes(doctorName, dateISO) {
+    function getExistingEnabledTimes(doctorName, dateISO, clinicId = getActiveScheduleClinicId()) {
       return scheduleChanges
         .filter((change) => (
           change.kind === "applyDates" &&
+          scheduleChangeMatchesClinic(change, clinicId) &&
           change.doctorName === doctorName &&
           Array.isArray(change.applyDates) &&
           change.applyDates.includes(dateISO)
@@ -3542,9 +4020,10 @@
         .flatMap((change) => Array.isArray(change.enabledTimes) ? change.enabledTimes : []);
     }
 
-    function removeAppliedSchedules(doctorName, dates) {
+    function removeAppliedSchedules(doctorName, dates, clinicId = getActiveScheduleClinicId()) {
       scheduleChanges = scheduleChanges.filter((change) => !(
         change.kind === "applyDates" &&
+        scheduleChangeMatchesClinic(change, clinicId) &&
         change.doctorName === doctorName &&
         Array.isArray(change.applyDates) &&
         change.applyDates.some((date) => dates.includes(date))
@@ -3560,11 +4039,11 @@
       const isDayOffApply = applyType === "dayOff";
       const finalEnabledTimes = mode === "append"
         ? Array.from(new Set([
-          ...cooperationRecordDraft.applyDates.flatMap((date) => getExistingEnabledTimes(cooperationRecordDraft.doctorName, date)),
+          ...cooperationRecordDraft.applyDates.flatMap((date) => getExistingEnabledTimes(cooperationRecordDraft.doctorName, date, clinic?.id || cooperationRecordClinicId.value)),
           ...enabledTimes
         ])).sort()
         : enabledTimes;
-      removeAppliedSchedules(cooperationRecordDraft.doctorName, cooperationRecordDraft.applyDates);
+      removeAppliedSchedules(cooperationRecordDraft.doctorName, cooperationRecordDraft.applyDates, clinic?.id || cooperationRecordClinicId.value);
       cooperationRecordDraft.changeText = isDayOffApply
         ? `已將 ${cooperationRecordDraft.applyDates.length} 個日期設為公休`
         : `${mode === "append" ? "已保留原資料並增加套用" : "已刪除原資料並覆蓋套用"}：${finalEnabledTimes.length} 個可預約時段套用至 ${cooperationRecordDraft.applyDates.length} 個日期`;
@@ -3633,7 +4112,7 @@
 
     function getAvailableSlotsForDate(doctorName, date) {
       const bookedTimes = new Set(getAppointmentProgressSlots(doctorName, date).map((slot) => slot.start));
-      return getDailySlots(doctorName, date)
+      return getDailySlots(doctorName, date, cooperationRecordDraft?.clinic?.id)
         .filter((slot) => slot.available && !bookedTimes.has(slot.time))
         .map((slot) => ({
           id: `available-${dateToISO(date)}-${slot.time}`,
@@ -3756,7 +4235,7 @@
       const weekStart = addDays(cooperationRecordDraft.selectedDate, -cooperationRecordDraft.selectedDate.getDay());
       const scheduleDays = Array.from({ length: 7 }, (_, index) => {
         const date = addDays(weekStart, index);
-        const status = getDayStatus(date, cooperationRecordDraft.doctorName);
+        const status = getDayStatus(date, cooperationRecordDraft.doctorName, cooperationRecordDraft.clinic.id);
         return {
           iso: dateToISO(date),
           weekday: formatWeekday(date),
@@ -3907,6 +4386,135 @@
       });
     }
 
+    const bookingPrecautionsModal = document.querySelector("#bookingPrecautionsModal");
+    const closeBookingPrecautions = document.querySelector("#closeBookingPrecautions");
+    const cancelBookingPrecautions = document.querySelector("#cancelBookingPrecautions");
+    const acknowledgePrecautions = document.querySelector("#acknowledgePrecautions");
+    const bookingPrecautionsCheckbox = document.querySelector("#bookingPrecautionsCheckbox");
+    const schedulePrecautionsModal = document.querySelector("#schedulePrecautionsModal");
+    const closeSchedulePrecautions = document.querySelector("#closeSchedulePrecautions");
+    const schedulePrecautionsCheckbox = document.querySelector("#schedulePrecautionsCheckbox");
+    const bookingPrecautionsDoctor = document.querySelector("#bookingPrecautionsDoctor");
+    const bookingPrecautionsList = document.querySelector("#bookingPrecautionsList");
+    const schedulePrecautionsDoctor = document.querySelector("#schedulePrecautionsDoctor");
+    const schedulePrecautionsList = document.querySelector("#schedulePrecautionsList");
+    const bookingPrecautionsKey = "bookingPrecautionsRead";
+
+    function normalizePrecautionsDoctorName(doctorName = "") {
+      return String(doctorName || "default").replace(/醫師$/, "").trim() || "default";
+    }
+
+    function getActivePrecautionsDoctorName() {
+      return bookingDraft?.doctorName || cooperationRecordDraft?.doctorName || cooperationScheduleDoctorName?.textContent || "醫師";
+    }
+
+    function getActivePrecautionsSpecialty() {
+      return bookingDraft?.specialty || cooperationRecordDraft?.specialty || cooperationScheduleSpecialty?.textContent || "";
+    }
+
+    function getBookingPrecautionsId(doctorName = getActivePrecautionsDoctorName()) {
+      return `${bookingPrecautionsKey}:${dateToISO(new Date())}:${encodeURIComponent(normalizePrecautionsDoctorName(doctorName))}`;
+    }
+
+    function hasReadBookingPrecautions(doctorName = getActivePrecautionsDoctorName()) {
+      return localStorage.getItem(getBookingPrecautionsId(doctorName)) === "1";
+    }
+
+    function markBookingPrecautionsRead(doctorName = getActivePrecautionsDoctorName()) {
+      localStorage.setItem(getBookingPrecautionsId(doctorName), "1");
+    }
+
+    function getDoctorPrecautionItems(doctorName = getActivePrecautionsDoctorName(), specialty = getActivePrecautionsSpecialty()) {
+      const specialtyText = String(specialty || "");
+      if (specialtyText.includes("牙")) {
+        return ["請攜帶健保卡", "拔牙或手術前請告知用藥與過敏史", "洗牙或治療前請先完成口腔清潔", "若需麻醉請避免空腹過久"];
+      }
+      if (specialtyText.includes("心臟") || specialtyText.includes("內科")) {
+        return ["請攜帶健保卡", "請攜帶近期心電圖或檢查報告", "高血壓或心臟用藥請照常服用", "若有胸悶胸痛請先告知護理人員"];
+      }
+      if (specialtyText.includes("小兒")) {
+        return ["請攜帶健保卡與兒童手冊", "發燒請先量測體溫並告知", "請記錄最近用藥與過敏史", "疫苗接種請攜帶接種紀錄"];
+      }
+      if (specialtyText.includes("皮膚")) {
+        return ["請攜帶健保卡", "看診前避免於患部擦藥或化妝", "請記錄過敏與近期用藥", "若需處置請穿著方便露出患部衣物"];
+      }
+      if (specialtyText.includes("眼")) {
+        return ["請攜帶健保卡", "散瞳檢查後不建議自行開車", "請攜帶眼鏡或隱形眼鏡資料", "若有眼痛或視力驟降請先告知"];
+      }
+      return ["請攜帶健保卡", `請依 ${normalizePrecautionsDoctorName(doctorName)} 醫師門診時間報到`, "初診請提早 10 分鐘報到", "慢性病回診請攜帶用藥紀錄或藥袋"];
+    }
+
+    function renderDoctorPrecautions(doctorElement, listElement, doctorName, specialty) {
+      if (doctorElement) doctorElement.textContent = `${normalizePrecautionsDoctorName(doctorName)} 醫師`;
+      if (listElement) {
+        listElement.innerHTML = getDoctorPrecautionItems(doctorName, specialty)
+          .map((item) => `<li>${escapeHTML(item)}</li>`)
+          .join("");
+      }
+    }
+
+    function showBookingModal() {
+      if (!bookingDraft) return;
+      bookingModal.classList.remove("patient-only");
+      if (bookingDraft.fromSchedule) bookingModal.classList.add("patient-only");
+      bookingModal.classList.add("active");
+      bookingModal.setAttribute("aria-hidden", "false");
+    }
+
+    function openBookingPrecautionsModal() {
+      if (!bookingDraft) return;
+      renderDoctorPrecautions(bookingPrecautionsDoctor, bookingPrecautionsList, bookingDraft.doctorName, bookingDraft.specialty);
+      bookingPrecautionsCheckbox.checked = false;
+      acknowledgePrecautions.disabled = true;
+      bookingPrecautionsModal.classList.add("active", "booking-precautions-modal");
+      bookingPrecautionsModal.setAttribute("aria-hidden", "false");
+    }
+
+    function closeBookingPrecautionsModal(clearDraft = false) {
+      bookingPrecautionsModal.classList.remove("active", "booking-precautions-modal");
+      bookingPrecautionsModal.setAttribute("aria-hidden", "true");
+      if (clearDraft && !bookingModal.classList.contains("active")) {
+        bookingDraft = null;
+      }
+    }
+
+    acknowledgePrecautions.addEventListener("click", () => {
+      if (!bookingDraft) return;
+      markBookingPrecautionsRead(bookingDraft.doctorName);
+      closeBookingPrecautionsModal(false);
+      showBookingModal();
+    });
+
+    bookingPrecautionsCheckbox.addEventListener("change", () => {
+      acknowledgePrecautions.disabled = !bookingPrecautionsCheckbox.checked;
+    });
+
+    closeBookingPrecautions.addEventListener("click", () => closeBookingPrecautionsModal(true));
+    cancelBookingPrecautions.addEventListener("click", () => closeBookingPrecautionsModal(true));
+
+    function openSchedulePrecautionsModal() {
+      const doctorName = getActivePrecautionsDoctorName();
+      renderDoctorPrecautions(schedulePrecautionsDoctor, schedulePrecautionsList, doctorName, getActivePrecautionsSpecialty());
+      schedulePrecautionsCheckbox.checked = hasReadBookingPrecautions(doctorName);
+      schedulePrecautionsModal.classList.add("active");
+      schedulePrecautionsModal.setAttribute("aria-hidden", "false");
+    }
+
+    function closeSchedulePrecautionsModal() {
+      markBookingPrecautionsRead(getActivePrecautionsDoctorName());
+      schedulePrecautionsCheckbox.checked = true;
+      schedulePrecautionsModal.classList.remove("active");
+      schedulePrecautionsModal.setAttribute("aria-hidden", "true");
+    }
+
+    document.querySelectorAll("[data-open-precautions]").forEach((button) => {
+      button.addEventListener("click", openSchedulePrecautionsModal);
+    });
+    schedulePrecautionsCheckbox.addEventListener("change", () => {
+      if (schedulePrecautionsCheckbox.checked) markBookingPrecautionsRead(getActivePrecautionsDoctorName());
+    });
+    closeSchedulePrecautions.addEventListener("click", closeSchedulePrecautionsModal);
+
     function openProfileEditor() {
       renderPeople();
       showPage("profileEditor");
@@ -3939,7 +4547,15 @@
       practiceSpecialty.value = "牙科";
       practicePhoto.value = "";
       practicePhotoData.value = "";
+      updatePracticePhotoPreview("");
       practiceNote.value = "";
+      practiceShowOnClinic.checked = false;
+    }
+
+    function updatePracticePhotoPreview(src) {
+      if (!practicePhotoPreview) return;
+      practicePhotoPreview.src = src || "";
+      practicePhotoPreview.classList.toggle("active", Boolean(src));
     }
 
     function normalizeDoctorPracticeFormLabels() {
@@ -3957,11 +4573,15 @@
       practiceSpecialty.value = card.specialty || "其他";
       practicePhoto.value = "";
       practicePhotoData.value = card.photo || "";
+      updatePracticePhotoPreview(card.photo || "");
       practiceNote.value = card.note || "";
+      practiceShowOnClinic.checked = card.showOnClinic === true;
     }
 
     function openDoctorPracticeEditor(card = null, returnPage = "doctorPracticeCard") {
       doctorPracticeReturnPage = returnPage;
+      const showOnClinicField = practiceShowOnClinic?.closest(".form-check");
+      if (showOnClinicField) showOnClinicField.style.display = returnPage === "clinicDoctorTeam" ? "" : "none";
       if (card) {
         doctorPracticeEditorTitle.textContent = "編輯醫師";
         fillDoctorPracticeForm(card);
@@ -3973,8 +4593,85 @@
       setTimeout(() => practiceDoctorName.focus(), 0);
     }
 
+    function getDoctorProfileContent(card) {
+      const specialty = card.specialty || "門診";
+      if (specialty.includes("牙")) {
+        return {
+          intro: `${card.doctorName} 醫師專注牙齒保健、牙周照護與美學治療，重視溝通與舒適看診體驗。`,
+          services: ["一般牙科與洗牙", "牙周照護與追蹤", "假牙與美學諮詢", "兒童口腔保健"],
+          articles: ["牙周照護日常", "洗牙會傷牙嗎", "兒童蛀牙預防", "牙齒美白須知"]
+        };
+      }
+      if (specialty.includes("眼")) {
+        return {
+          intro: `${card.doctorName} 醫師提供眼科檢查、視力照護與常見眼疾追蹤，協助患者掌握眼睛健康。`,
+          services: ["視力與眼壓檢查", "乾眼症照護", "白內障諮詢", "兒童視力追蹤"],
+          articles: ["乾眼症怎麼辦", "散瞳檢查須知", "護眼習慣", "眼壓檢查重點"]
+        };
+      }
+      if (specialty.includes("皮膚")) {
+        return {
+          intro: `${card.doctorName} 醫師擅長皮膚問題診斷、慢性皮膚病追蹤與日常保養建議。`,
+          services: ["濕疹與異位性皮膚炎", "青春痘治療", "過敏與蕁麻疹", "皮膚保養諮詢"],
+          articles: ["敏感肌照護", "痘痘治療迷思", "防曬怎麼選", "濕疹日常管理"]
+        };
+      }
+      return {
+        intro: card.note || `${card.doctorName} 醫師重視完整評估與清楚說明，提供以患者需求為中心的專業醫療服務。`,
+        services: [`${specialty}診療`, "慢性病回診追蹤", "檢查報告判讀", "健康照護諮詢"],
+        articles: [`${specialty}常見問題`, "回診前準備", "用藥注意事項", "健康生活建議"]
+      };
+    }
+
+    function openDoctorPracticeProfile(card, returnPage = "doctorPracticeCard") {
+      doctorProfileReturnPage = returnPage;
+      const content = getDoctorProfileContent(card);
+      doctorProfilePhoto.src = card.photo || `https://i.pravatar.cc/160?u=${encodeURIComponent(card.id)}`;
+      doctorProfilePhoto.alt = `${card.doctorName} 醫師照片`;
+      doctorProfileName.textContent = card.doctorName || "醫師";
+      doctorProfileSpecialty.textContent = `${card.specialty || "門診"}專科醫師`;
+      doctorProfileClinic.textContent = card.clinicName || "合作診所主治醫師";
+      doctorProfileIntro.textContent = content.intro;
+      doctorProfileExperience.innerHTML = [
+        `${card.clinicName || "合作診所"} 主治醫師`,
+        `${card.specialty || "門診"} 專科醫師`,
+        `醫師證號 ${card.licenseNo || "未填寫"}`
+      ].map((item) => `<li>${escapeHTML(item)}</li>`).join("");
+      doctorProfileServices.innerHTML = content.services.map((item) => `<li>${escapeHTML(item)}</li>`).join("");
+      const articleImages = [
+        "https://images.unsplash.com/photo-1559757175-5700dde675bc?auto=format&fit=crop&w=180&q=80",
+        "https://images.unsplash.com/photo-1505751172876-fa1923c5c528?auto=format&fit=crop&w=180&q=80",
+        "https://images.unsplash.com/photo-1498837167922-ddd27525d352?auto=format&fit=crop&w=180&q=80",
+        "https://images.unsplash.com/photo-1576091160550-2173dba999ef?auto=format&fit=crop&w=180&q=80"
+      ];
+      doctorProfileArticles.innerHTML = content.articles.map((title, index) => `
+        <article class="doctor-profile-article">
+          <img src="${articleImages[index]}" alt="">
+          <strong>${escapeHTML(title)}</strong>
+          <small>2024/05/${String(10 + index * 3).padStart(2, "0")}　${index + 1}.${index + 2}K</small>
+        </article>
+      `).join("");
+      const reviewNames = ["林小姐", "陳先生", "黃小姐"];
+      const reviewTexts = [
+        "醫師說明很清楚，會確認我是否理解檢查結果，整體看診很安心。",
+        "預約流程順，現場等候時間合理，護理人員也會主動提醒下一步。",
+        "問診仔細，對用藥和日常照護都有具體建議，回診追蹤很方便。"
+      ];
+      doctorProfileReviews.innerHTML = reviewTexts.map((text, index) => `
+        <article class="doctor-profile-review">
+          <div class="doctor-profile-review-avatar">${escapeHTML(reviewNames[index].slice(0, 1))}</div>
+          <div>
+            <div class="doctor-profile-review-head"><span>${escapeHTML(reviewNames[index])}</span><span class="doctor-profile-review-stars">★★★★★</span></div>
+            <p>${escapeHTML(text)}</p>
+          </div>
+        </article>
+      `).join("");
+      showPage("doctorPracticeProfile");
+    }
+
     function renderDoctorPracticeCards() {
-      doctorPracticeList.innerHTML = doctorPracticeCards.map((card) => `
+      const cards = getBaseDoctorPracticeCards();
+      doctorPracticeList.innerHTML = cards.map((card) => `
         <article class="doctor-practice-card">
           <img class="doctor-practice-avatar" src="${escapeHTML(card.photo || `https://i.pravatar.cc/96?u=${encodeURIComponent(card.id)}`)}" alt="${escapeHTML(card.doctorName)}">
           <div>
@@ -3985,8 +4682,8 @@
           </div>
           <div class="doctor-practice-actions">
             <button class="doctor-practice-action" type="button" data-practice-detail="${card.id}">查看詳情</button>
-            <button class="doctor-practice-action" type="button" data-practice-message="${card.id}">發送訊息</button>
-            <button class="doctor-practice-action" type="button" data-practice-edit="${card.id}">編輯資料</button>
+            <button class="doctor-practice-action" type="button" data-practice-message="${card.id}">編輯預約</button>
+            <button class="doctor-practice-action" type="button" data-practice-edit="${card.id}">編輯個人</button>
             <button class="doctor-practice-action danger" type="button" data-practice-delete="${card.id}">刪除卡片</button>
           </div>
         </article>
@@ -3994,14 +4691,14 @@
 
       doctorPracticeList.querySelectorAll("[data-practice-edit]").forEach((button) => {
         button.addEventListener("click", () => {
-          const card = doctorPracticeCards.find((item) => item.id === button.dataset.practiceEdit);
+          const card = cards.find((item) => item.id === button.dataset.practiceEdit);
           if (card) openDoctorPracticeEditor(card);
         });
       });
 
       doctorPracticeList.querySelectorAll("[data-practice-message]").forEach((button) => {
         button.addEventListener("click", () => {
-          const card = doctorPracticeCards.find((item) => item.id === button.dataset.practiceMessage);
+          const card = cards.find((item) => item.id === button.dataset.practiceMessage);
           if (!card) return;
           notices.unshift({
             id: createId(),
@@ -4019,25 +4716,15 @@
 
       doctorPracticeList.querySelectorAll("[data-practice-detail]").forEach((button) => {
         button.addEventListener("click", () => {
-          const card = doctorPracticeCards.find((item) => item.id === button.dataset.practiceDetail);
+          const card = cards.find((item) => item.id === button.dataset.practiceDetail);
           if (!card) return;
-          notices.unshift({
-            id: createId(),
-            type: "success",
-            title: "醫師資料已查看",
-            text: `${card.doctorName} 的執業卡資料已開啟。`,
-            time: "剛剛",
-            unread: true
-          });
-          saveNotices();
-          renderNotices();
-          button.textContent = "已查看";
+          openDoctorPracticeProfile(card);
         });
       });
 
       doctorPracticeList.querySelectorAll("[data-practice-delete]").forEach((button) => {
         button.addEventListener("click", () => {
-          const card = doctorPracticeCards.find((item) => item.id === button.dataset.practiceDelete);
+          const card = cards.find((item) => item.id === button.dataset.practiceDelete);
           if (card) openDeletePracticeModal(card);
         });
       });
@@ -4045,6 +4732,9 @@
 
     function openDeletePracticeModal(card) {
       pendingDeletePracticeId = card.id;
+      pendingDeleteTeamDoctorId = "";
+      pendingDeleteClinicId = "";
+      deletePracticeTitle.textContent = "刪除醫師執業卡";
       deletePracticeMessage.textContent = `確定要刪除「${card.doctorName}」的醫師執業卡嗎？刪除後會從醫師清單與邀請醫生列表移除。`;
       deletePracticeModal.classList.add("active");
       deletePracticeModal.setAttribute("aria-hidden", "false");
@@ -4053,11 +4743,16 @@
     function closeDeletePracticeModal() {
       pendingDeletePracticeId = "";
       pendingDeleteTeamDoctorId = "";
+      pendingDeleteClinicId = "";
       deletePracticeModal.classList.remove("active");
       deletePracticeModal.setAttribute("aria-hidden", "true");
     }
 
     function deletePendingPracticeCard() {
+      if (pendingDeleteClinicId) {
+        deletePendingOpenedClinic();
+        return;
+      }
       if (pendingDeleteTeamDoctorId) {
         removeDoctorFromClinicTeam(pendingDeleteTeamDoctorId);
         closeDeletePracticeModal();
@@ -4093,27 +4788,59 @@
       return (clinic.invitedDoctors || []).length;
     }
 
-    function getDoctorPracticeByTeamDoctor(doctor) {
-      return doctorPracticeCards.find((card) => (
+    function isClinicScopedPracticeCard(card) {
+      return Boolean(card?.clinicId);
+    }
+
+    function getBaseDoctorPracticeCards() {
+      return doctorPracticeCards.filter((card) => !isClinicScopedPracticeCard(card));
+    }
+
+    function getBaseDoctorPracticeByTeamDoctor(doctor) {
+      return getBaseDoctorPracticeCards().find((card) => (
+        card.id === doctor.sourceCardId ||
         card.id === doctor.cardId ||
         card.licenseNo === doctor.id ||
         card.doctorName === doctor.name
       ));
     }
 
+    function getDoctorPracticeByTeamDoctor(doctor, clinicId = "") {
+      if (clinicId) {
+        const baseCard = getBaseDoctorPracticeByTeamDoctor(doctor);
+        const clinicCard = doctorPracticeCards.find((card) => (
+          card.clinicId === clinicId &&
+          (
+            card.id === doctor.clinicCardId ||
+            card.id === doctor.cardId ||
+            card.sourceCardId === doctor.sourceCardId ||
+            card.sourceCardId === doctor.cardId ||
+            (baseCard && card.sourceCardId === baseCard.id) ||
+            card.licenseNo === doctor.id ||
+            card.doctorName === doctor.name
+          )
+        ));
+        if (clinicCard) return clinicCard;
+      }
+      return getBaseDoctorPracticeByTeamDoctor(doctor);
+    }
+
     function getClinicTeamDoctors(clinicId) {
       const clinic = openedClinics.find((item) => item.id === clinicId);
       if (!clinic) return [];
       return (clinic.invitedDoctors || []).map((doctor) => {
-        const card = getDoctorPracticeByTeamDoctor(doctor);
+        const card = getDoctorPracticeByTeamDoctor(doctor, clinicId);
+        const baseCard = getBaseDoctorPracticeByTeamDoctor(doctor);
         return {
           id: doctor.id,
           cardId: card?.id || "",
+          clinicCardId: isClinicScopedPracticeCard(card) ? card.id : "",
+          sourceCardId: baseCard?.id || doctor.sourceCardId || doctor.cardId || "",
           name: card?.doctorName || doctor.name,
           specialty: card?.specialty || clinic.category || "門診",
           clinicName: card?.clinicName || clinic.name,
           licenseNo: card?.licenseNo || doctor.id,
-          avatar: card ? `https://i.pravatar.cc/96?u=${encodeURIComponent(card.id)}` : `https://i.pravatar.cc/96?u=${encodeURIComponent(doctor.id)}`
+          avatar: card?.photo || `https://i.pravatar.cc/96?u=${encodeURIComponent(card?.id || doctor.id)}`
         };
       });
     }
@@ -4155,6 +4882,41 @@
       return card;
     }
 
+    function ensureClinicTeamDoctorPracticeCard(doctor) {
+      const clinic = openedClinics.find((item) => item.id === activeTeamClinicId);
+      const invitedDoctor = clinic?.invitedDoctors?.find((item) => item.id === doctor.id);
+      const teamDoctor = invitedDoctor || doctor;
+      const existingClinicCard = getDoctorPracticeByTeamDoctor(teamDoctor, activeTeamClinicId);
+      if (existingClinicCard && isClinicScopedPracticeCard(existingClinicCard)) return existingClinicCard;
+
+      const baseCard = getBaseDoctorPracticeByTeamDoctor(teamDoctor) || getBaseDoctorPracticeByTeamDoctor(doctor);
+      const card = {
+        id: createId(),
+        clinicId: activeTeamClinicId,
+        sourceCardId: baseCard?.id || doctor.sourceCardId || doctor.cardId || "",
+        doctorName: baseCard?.doctorName || doctor.name,
+        licenseNo: baseCard?.licenseNo || doctor.licenseNo || doctor.id,
+        specialty: baseCard?.specialty || doctor.specialty || "其他",
+        clinicName: clinic?.name || doctor.clinicName || getOpenedClinicName(activeTeamClinicId),
+        photo: baseCard?.photo || doctor.avatar || "",
+        note: baseCard?.note || "",
+        showOnClinic: false,
+        createdAt: new Date().toISOString()
+      };
+      doctorPracticeCards.unshift(card);
+      try {
+        saveDoctorPracticeCards();
+      } catch (error) {
+      }
+      if (invitedDoctor) {
+        invitedDoctor.clinicCardId = card.id;
+        if (baseCard?.id) invitedDoctor.sourceCardId = baseCard.id;
+        saveOpenedClinics();
+      }
+      renderInviteDoctors();
+      return card;
+    }
+
     function removeDoctorFromClinicTeam(doctorId) {
       const clinic = openedClinics.find((item) => item.id === activeTeamClinicId);
       const doctor = getClinicTeamDoctors(activeTeamClinicId).find((item) => item.id === doctorId);
@@ -4182,6 +4944,8 @@
     function openDeleteTeamDoctorModal(doctor) {
       pendingDeletePracticeId = "";
       pendingDeleteTeamDoctorId = doctor.id;
+      pendingDeleteClinicId = "";
+      deletePracticeTitle.textContent = "刪除醫師卡片";
       deletePracticeMessage.textContent = `確定要刪除「${doctor.name}」在 ${getOpenedClinicName(activeTeamClinicId)} 的醫師卡片嗎？刪除後會從此診所醫師團隊移除。`;
       deletePracticeModal.classList.add("active");
       deletePracticeModal.setAttribute("aria-hidden", "false");
@@ -4200,8 +4964,8 @@
           </div>
           <div class="doctor-practice-actions">
             <button class="doctor-practice-action" type="button" data-team-detail="${escapeHTML(doctor.id)}">查看詳情</button>
-            <button class="doctor-practice-action" type="button" data-team-message="${escapeHTML(doctor.id)}">發送訊息</button>
-            <button class="doctor-practice-action" type="button" data-team-edit="${escapeHTML(doctor.id)}">編輯資料</button>
+            <button class="doctor-practice-action" type="button" data-team-message="${escapeHTML(doctor.id)}">編輯預約</button>
+            <button class="doctor-practice-action" type="button" data-team-edit="${escapeHTML(doctor.id)}">編輯個人</button>
             <button class="doctor-practice-action danger" type="button" data-team-delete="${escapeHTML(doctor.id)}">刪除卡片</button>
           </div>
         </article>
@@ -4244,7 +5008,7 @@
         button.addEventListener("click", () => {
           const doctor = doctors.find((item) => item.id === button.dataset.teamEdit);
           if (!doctor) return;
-          openDoctorPracticeEditor(ensureTeamDoctorPracticeCard(doctor), "clinicDoctorTeam");
+          openDoctorPracticeEditor(ensureClinicTeamDoctorPracticeCard(doctor), "clinicDoctorTeam");
         });
       });
 
@@ -4265,10 +5029,11 @@
     }
 
     function getInviteDoctorOptions() {
-      const userDoctors = doctorPracticeCards.map((card, index) => ({
+      const userDoctors = getBaseDoctorPracticeCards().map((card, index) => ({
         id: card.licenseNo || `CARD${index + 1}`,
         name: card.doctorName,
-        avatar: `https://i.pravatar.cc/96?u=${encodeURIComponent(card.id)}`,
+        cardId: card.id,
+        avatar: card.photo || `https://i.pravatar.cc/96?u=${encodeURIComponent(card.id)}`,
         source: "user"
       }));
 
@@ -4303,7 +5068,8 @@
             unread: true,
             clinicId: inviteClinicId,
             doctorId: doctor.id,
-            doctorName: doctor.name
+            doctorName: doctor.name,
+            doctorCardId: doctor.cardId || ""
           });
           saveNotices();
           renderNotices();
@@ -4322,7 +5088,8 @@
           <div class="opened-clinic-actions">
             <button class="opened-clinic-action" type="button" data-opened-clinic-detail="${clinic.id}">查看詳情</button>
             <button class="opened-clinic-action" type="button" data-opened-clinic-invite="${clinic.id}">邀請醫師</button>
-            <button class="opened-clinic-action" type="button" data-opened-clinic-edit="${clinic.id}">編輯資料</button>
+            <button class="opened-clinic-action" type="button" data-opened-clinic-edit="${clinic.id}">編輯診所</button>
+             <button class="opened-clinic-action" type="button" data-opened-clinic-delete="${clinic.id}">刪除診所</button>
           </div>
         </article>
       `).join("");
@@ -4362,10 +5129,62 @@
           openInviteDoctors(button.dataset.openedClinicInvite);
         });
       });
+
+      openedClinicList.querySelectorAll("[data-opened-clinic-delete]").forEach((button) => {
+        button.addEventListener("click", (event) => {
+          event.stopPropagation();
+          const clinic = openedClinics.find((item) => item.id === button.dataset.openedClinicDelete);
+          if (clinic) openDeleteOpenedClinicModal(clinic);
+        });
+      });
+    }
+
+    function openDeleteOpenedClinicModal(clinic) {
+      pendingDeletePracticeId = "";
+      pendingDeleteTeamDoctorId = "";
+      pendingDeleteClinicId = clinic.id;
+      deletePracticeTitle.textContent = "刪除診所";
+      deletePracticeMessage.textContent = `確定要刪除「${clinic.name}」嗎？刪除後會移除此診所、醫師團隊、相關預約與排程資料。`;
+      deletePracticeModal.classList.add("active");
+      deletePracticeModal.setAttribute("aria-hidden", "false");
+    }
+
+    function deletePendingOpenedClinic() {
+      const clinic = openedClinics.find((item) => item.id === pendingDeleteClinicId);
+      if (!clinic) {
+        closeDeletePracticeModal();
+        return;
+      }
+      openedClinics = openedClinics.filter((item) => item.id !== clinic.id);
+      appointments = appointments.filter((appointment) => appointment.clinicId !== clinic.id && appointment.clinicName !== clinic.name);
+      scheduleChanges = scheduleChanges.filter((change) => change.clinicId !== clinic.id && change.clinicName !== clinic.name);
+      if (activeClinicId === clinic.id) activeClinicId = "";
+      if (activeTeamClinicId === clinic.id) activeTeamClinicId = "";
+      saveOpenedClinics();
+      saveAppointments();
+      saveScheduleChanges();
+      renderOpenedClinics();
+      renderHomeClinics();
+      renderAppointments();
+      notices.unshift({
+        id: createId(),
+        type: "system",
+        title: "診所已刪除",
+        text: `已刪除 ${clinic.name} 與相關預約資料。`,
+        time: "剛剛",
+        unread: true
+      });
+      saveNotices();
+      renderNotices();
+      closeDeletePracticeModal();
+      showPage("openedClinics", { replace: true });
     }
 
     function clearOpenedClinicForm() {
       openedClinicId.value = "";
+      openedClinicImage.value = "";
+      openedClinicImageData.value = "";
+      updateOpenedClinicImagePreview("");
       openedClinicName.value = "";
       openedClinicCategory.value = "牙科";
       openedClinicAddress.value = "";
@@ -4374,8 +5193,17 @@
       openedClinicShowOnHome.checked = false;
     }
 
+    function updateOpenedClinicImagePreview(src) {
+      if (!openedClinicImagePreview) return;
+      openedClinicImagePreview.src = src || "";
+      openedClinicImagePreview.classList.toggle("active", Boolean(src));
+    }
+
     function fillOpenedClinicForm(clinic) {
       openedClinicId.value = clinic.id;
+      openedClinicImage.value = "";
+      openedClinicImageData.value = clinic.image || "";
+      updateOpenedClinicImagePreview(clinic.image || "");
       openedClinicName.value = clinic.name;
       openedClinicCategory.value = clinic.category || "其他";
       openedClinicAddress.value = clinic.address;
@@ -4451,8 +5279,8 @@
       return weekday === 0 || weekday === 6;
     }
 
-    function getDailySlots(doctorName, date) {
-      const applied = findAppliedSchedule(doctorName, date);
+    function getDailySlots(doctorName, date, clinicId = getActiveScheduleClinicId()) {
+      const applied = findAppliedSchedule(doctorName, date, clinicId);
       if (applied) {
         if (applied.isDayOff) return [];
         return applied.enabledTimes.map((time) => ({
@@ -4463,8 +5291,8 @@
       return [];
     }
 
-    function getDayStatus(date, doctorName) {
-      const applied = findAppliedSchedule(doctorName, date);
+    function getDayStatus(date, doctorName, clinicId = getActiveScheduleClinicId()) {
+      const applied = findAppliedSchedule(doctorName, date, clinicId);
       const isOff = isClinicOff(date);
       if (applied?.isDayOff) {
         return {
@@ -4473,7 +5301,7 @@
           label: "公休"
         };
       }
-      const count = applied ? getDailySlots(doctorName, date).filter((slot) => slot.available).length : 0;
+      const count = applied ? getDailySlots(doctorName, date, clinicId).filter((slot) => slot.available).length : 0;
       return {
         count,
         state: applied ? "" : (isOff ? "off" : ""),
@@ -4481,11 +5309,11 @@
       };
     }
 
-    function makeScheduleDays(selectedDate, doctorName) {
+    function makeScheduleDays(selectedDate, doctorName, clinicId = getActiveScheduleClinicId()) {
       const startDate = addDays(selectedDate, -7 - selectedDate.getDay());
       return Array.from({ length: 21 }, (_, index) => {
         const date = addDays(startDate, index);
-        const status = getDayStatus(date, doctorName);
+        const status = getDayStatus(date, doctorName, clinicId);
         return {
           iso: dateToISO(date),
           weekday: formatWeekday(date),
@@ -4497,12 +5325,12 @@
       });
     }
 
-    function getDoctorSlots(doctorName, selectedDate) {
-      const slots = getDailySlots(doctorName, selectedDate);
+    function getDoctorSlots(doctorName, selectedDate, clinicId = getActiveScheduleClinicId()) {
+      const slots = getDailySlots(doctorName, selectedDate, clinicId);
       return {
         date: formatFullDate(selectedDate),
         day: formatWeekday(selectedDate, true),
-        days: makeScheduleDays(selectedDate, doctorName),
+        days: makeScheduleDays(selectedDate, doctorName, clinicId),
         slots,
         defaultTime: slots.find((slot) => slot.available)?.time
       };
@@ -4533,8 +5361,11 @@
       weekStrip.innerHTML = "";
       slotOptions.innerHTML = `<label class="slot-option"><input type="radio" name="slot" value="${escapeHTML(slotTime)}" checked><span>${escapeHTML(slotTime)}</span></label>`;
       renderPatientOptions();
-      bookingModal.classList.add("active", "patient-only");
-      bookingModal.setAttribute("aria-hidden", "false");
+      if (hasReadBookingPrecautions(bookingDraft.doctorName)) {
+        showBookingModal();
+      } else {
+        openBookingPrecautionsModal();
+      }
     }
 
     function openBookingModal(doctorName, specialty) {
@@ -4545,13 +5376,15 @@
       bookingSummary.textContent = `${doctorName} - ${specialty}`;
       renderBookingSchedule();
       renderPatientOptions();
-      bookingModal.classList.remove("patient-only");
-      bookingModal.classList.add("active");
-      bookingModal.setAttribute("aria-hidden", "false");
+      if (hasReadBookingPrecautions(bookingDraft.doctorName)) {
+        showBookingModal();
+      } else {
+        openBookingPrecautionsModal();
+      }
     }
 
     function renderBookingSchedule() {
-      const schedule = getDoctorSlots(bookingDraft.doctorName, bookingDraft.selectedDate);
+      const schedule = getDoctorSlots(bookingDraft.doctorName, bookingDraft.selectedDate, bookingDraft.clinic?.id);
       lastBookingDateISO = dateToISO(bookingDraft.selectedDate);
       bookingDraft.date = schedule.date;
       bookingDraft.day = schedule.day;
@@ -4589,6 +5422,18 @@
       bookingDraft = null;
     }
 
+    function getClinicDoctorPhoto(clinicId, doctorName, index) {
+      const openedClinic = openedClinics.find((clinic) => clinic.id === clinicId);
+      const teamDoctor = (openedClinic?.invitedDoctors || []).find((doctor) => {
+        const card = getDoctorPracticeByTeamDoctor(doctor, openedClinic.id);
+        return doctor.name === doctorName || card?.doctorName === doctorName;
+      });
+      const card = teamDoctor
+        ? getDoctorPracticeByTeamDoctor(teamDoctor, clinicId)
+        : doctorPracticeCards.find((item) => item.clinicId === clinicId && item.doctorName === doctorName) || getBaseDoctorPracticeCards().find((item) => item.doctorName === doctorName);
+      return card?.photo || `https://i.pravatar.cc/96?img=${index + 12}`;
+    }
+
     function renderClinicDetail(clinicId) {
       activeClinicId = clinicId;
       const clinic = getClinicDetail(clinicId);
@@ -4599,10 +5444,16 @@
       detailRating.textContent = clinic.rating;
       detailReviews.textContent = clinic.reviews;
       detailDistance.textContent = getClinicDistanceById(clinicId, clinic) || clinic.distance;
+      detailDistance.closest(".stat")?.setAttribute("role", "button");
+      detailDistance.closest(".stat")?.setAttribute("tabindex", "0");
+      detailDistance.closest(".stat")?.setAttribute("aria-label", "開啟診所地圖");
+      const doctorSectionHead = doctorList.previousElementSibling;
+      if (doctorSectionHead) doctorSectionHead.style.display = clinic.doctors.length ? "" : "none";
+      doctorList.style.display = clinic.doctors.length ? "" : "none";
       doctorList.innerHTML = clinic.doctors.map(([name, specialty], index) => `
         <article class="doctor-card">
-          <img class="doctor-avatar" src="https://i.pravatar.cc/96?img=${index + 12}" alt="${name}">
-          <div><h3>${name}</h3><span class="muted">${specialty}</span></div>
+          <img class="doctor-avatar" src="${escapeHTML(getClinicDoctorPhoto(clinicId, name, index))}" alt="${escapeHTML(name)}">
+          <div><h3>${escapeHTML(name)}</h3><span class="muted">${escapeHTML(specialty)}</span></div>
           <button class="small-btn" type="button" data-doctor="${name}" data-specialty="${specialty}">預約</button>
         </article>
       `).join("");
@@ -4651,6 +5502,7 @@
       }
       goBack("doctorPracticeCard");
     });
+    document.querySelector("#backDoctorPracticeProfile")?.addEventListener("click", () => goBack(doctorProfileReturnPage));
     backInviteDoctors.addEventListener("click", () => {
       if (inviteReturnPage === "clinicDoctorTeam") {
         goBack("clinicDoctorTeam");
@@ -4668,18 +5520,39 @@
     });
     inviteTeamDoctor.addEventListener("click", () => openInviteDoctors(activeTeamClinicId, "clinicDoctorTeam"));
     newDoctorPractice.addEventListener("click", () => openDoctorPracticeEditor());
+    openScheduleDoctorProfile?.addEventListener("click", openCurrentScheduleDoctorProfile);
     normalizeDoctorPracticeFormLabels();
-    practicePhoto.addEventListener("change", () => {
+    practicePhoto.addEventListener("change", async () => {
       const file = practicePhoto.files?.[0];
       if (!file) {
         practicePhotoData.value = "";
+        updatePracticePhotoPreview("");
         return;
       }
-      const reader = new FileReader();
-      reader.addEventListener("load", () => {
-        practicePhotoData.value = String(reader.result || "");
-      });
-      reader.readAsDataURL(file);
+      try {
+        const imageData = await readImageFileAsDataURL(file, 320, 0.84);
+        practicePhotoData.value = imageData;
+        updatePracticePhotoPreview(imageData);
+      } catch (error) {
+        practicePhotoData.value = "";
+        updatePracticePhotoPreview("");
+      }
+    });
+    openedClinicImage.addEventListener("change", async () => {
+      const file = openedClinicImage.files?.[0];
+      if (!file) {
+        openedClinicImageData.value = "";
+        updateOpenedClinicImagePreview("");
+        return;
+      }
+      try {
+        const imageData = await readImageFileAsDataURL(file, 640, 0.82);
+        openedClinicImageData.value = imageData;
+        updateOpenedClinicImagePreview(imageData);
+      } catch (error) {
+        openedClinicImageData.value = "";
+        updateOpenedClinicImagePreview("");
+      }
     });
     newOpenedClinic.addEventListener("click", () => openOpenedClinicEditor());
     cancelOpenedClinic.addEventListener("click", openOpenedClinics);
@@ -4945,6 +5818,7 @@
     openedClinicForm.addEventListener("submit", (event) => {
       event.preventDefault();
 
+      const existingClinic = openedClinics.find((clinic) => clinic.id === openedClinicId.value);
       const savedClinic = {
         id: openedClinicId.value || createId(),
         name: openedClinicName.value.trim(),
@@ -4953,15 +5827,11 @@
         phone: openedClinicPhone.value.trim(),
         note: openedClinicNote.value.trim(),
         showOnHome: openedClinicShowOnHome.checked,
-        image: "https://images.unsplash.com/photo-1629909613654-28e377c37b09?auto=format&fit=crop&w=160&q=80"
+        image: openedClinicImageData.value || existingClinic?.image || defaultClinicImage
       };
 
       if (!savedClinic.name || !savedClinic.address) return;
 
-      const existingClinic = openedClinics.find((clinic) => clinic.id === savedClinic.id);
-      if (existingClinic?.image) {
-        savedClinic.image = existingClinic.image;
-      }
       if (existingClinic?.invitedDoctors) {
         savedClinic.invitedDoctors = existingClinic.invitedDoctors;
       }
@@ -5007,18 +5877,24 @@
       renderCooperationRecordSchedule();
     });
 
-    doctorPracticeForm.addEventListener("submit", (event) => {
+    doctorPracticeForm.addEventListener("submit", async (event) => {
       event.preventDefault();
+      const existingPracticeCard = doctorPracticeCards.find((card) => card.id === practiceCardId.value);
+      const isClinicTeamEdit = doctorPracticeReturnPage === "clinicDoctorTeam";
+      const photoData = await compressImageDataURL(practicePhotoData.value, 320, 0.84);
 
       const practiceCard = {
         id: practiceCardId.value || createId(),
+        clinicId: existingPracticeCard?.clinicId || (isClinicTeamEdit ? activeTeamClinicId : ""),
+        sourceCardId: existingPracticeCard?.sourceCardId || "",
         doctorName: practiceDoctorName.value.trim(),
         licenseNo: practiceLicenseNo.value.trim(),
         specialty: practiceSpecialty.value,
-        clinicName: "",
-        photo: practicePhotoData.value,
+        clinicName: isClinicTeamEdit ? getOpenedClinicName(activeTeamClinicId) : "",
+        photo: photoData,
         note: practiceNote.value.trim(),
-        createdAt: new Date().toISOString()
+        showOnClinic: practiceShowOnClinic.checked,
+        createdAt: existingPracticeCard?.createdAt || new Date().toISOString()
       };
 
       if (!practiceCard.doctorName || !practiceCard.licenseNo) return;
@@ -5028,20 +5904,26 @@
       else doctorPracticeCards.unshift(practiceCard);
       if (doctorPracticeReturnPage === "clinicDoctorTeam") {
         const clinic = openedClinics.find((item) => item.id === activeTeamClinicId);
-        const invitedDoctor = clinic?.invitedDoctors?.find((doctor) => doctor.cardId === practiceCard.id);
+        const invitedDoctor = clinic?.invitedDoctors?.find((doctor) => doctor.clinicCardId === practiceCard.id || doctor.cardId === practiceCard.id || doctor.id === existingPracticeCard?.licenseNo || doctor.id === practiceCard.licenseNo);
         if (invitedDoctor) {
           invitedDoctor.id = practiceCard.licenseNo;
           invitedDoctor.name = practiceCard.doctorName;
-          invitedDoctor.cardId = practiceCard.id;
+          invitedDoctor.clinicCardId = practiceCard.id;
+          if (practiceCard.sourceCardId) invitedDoctor.sourceCardId = practiceCard.sourceCardId;
           saveOpenedClinics();
           renderOpenedClinics();
           renderHomeClinics();
-          if (activeClinicId === clinic.id) {
+          if (clinic && activeClinicId === clinic.id) {
             renderClinicDetail(clinic.id);
           }
         }
       }
-      saveDoctorPracticeCards();
+      try {
+        saveDoctorPracticeCards();
+      } catch (error) {
+        alert("照片資料太大，請重新選擇較小的照片後再儲存。");
+        return;
+      }
       renderHomeClinics();
       renderInviteDoctors();
       notices.unshift({
@@ -5055,7 +5937,9 @@
       saveNotices();
       renderNotices();
       renderDoctorPracticeCards();
-      renderClinicDoctorTeam();
+      if (doctorPracticeReturnPage === "clinicDoctorTeam") {
+        renderClinicDoctorTeam();
+      }
       doctorPracticeForm.reset();
       if (doctorPracticeReturnPage === "clinicDoctorTeam") {
         showPage("clinicDoctorTeam", { replace: true });
@@ -5067,6 +5951,17 @@
     closeBooking.addEventListener("click", closeBookingModal);
     bookingModal.addEventListener("click", (event) => {
       if (event.target === bookingModal) closeBookingModal();
+    });
+    cancelAppointmentModal.addEventListener("click", (event) => {
+      if (event.target === cancelAppointmentModal) closeCancelAppointmentModal();
+    });
+    returnCancelAppointment.addEventListener("click", closeCancelAppointmentModal);
+    confirmCancelAppointment.addEventListener("click", confirmPendingCancelAppointment);
+    bookingPrecautionsModal.addEventListener("click", (event) => {
+      if (event.target === bookingPrecautionsModal) closeBookingPrecautionsModal();
+    });
+    schedulePrecautionsModal.addEventListener("click", (event) => {
+      if (event.target === schedulePrecautionsModal) closeSchedulePrecautionsModal();
     });
     setUserAddress.addEventListener("click", setUserLocationFromAddress);
     homeSearchInput.addEventListener("input", renderHomeClinics);
@@ -5137,6 +6032,19 @@
     cancelLocationMap.addEventListener("click", closeLocationMapModal);
     locationMapModal.addEventListener("click", (event) => {
       if (event.target === locationMapModal) closeLocationMapModal();
+    });
+    closeClinicMap.addEventListener("click", closeClinicMapModal);
+    clinicMapModal.addEventListener("click", (event) => {
+      if (event.target === clinicMapModal) closeClinicMapModal();
+    });
+    openExternalClinicMap.addEventListener("click", openActiveClinicInMaps);
+    detailDistance.closest(".stat")?.addEventListener("click", () => {
+      if (activeClinicId) openClinicMapModal(activeClinicId, getClinicDetail(activeClinicId));
+    });
+    detailDistance.closest(".stat")?.addEventListener("keydown", (event) => {
+      if (!activeClinicId || (event.key !== "Enter" && event.key !== " ")) return;
+      event.preventDefault();
+      openClinicMapModal(activeClinicId, getClinicDetail(activeClinicId));
     });
     locationPickerMap.addEventListener("click", previewUserLocationFromMap);
     confirmLocationMap.addEventListener("click", confirmUserLocationFromMap);
