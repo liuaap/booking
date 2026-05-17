@@ -2436,9 +2436,64 @@
 
     const defaultInviteDoctors = [];
 
-    const clinics = {};
+    const clinics = {
+      healthy: {
+        name: "仁心健康診所",
+        tag: "心臟科",
+        rating: "4.9",
+        reviews: "128",
+        distance: "1.2 km",
+        address: "台北市信義路五段 18 號",
+        cover: "https://images.unsplash.com/photo-1629909613654-28e377c37b09?auto=format&fit=crop&w=640&q=80",
+        about: "提供心血管追蹤、慢性病照護與健康檢查，支援線上預約與看診提醒。",
+        doctors: [
+          ["陳柏安", "心臟科 / 上午門診"],
+          ["林品妤", "家醫科 / 下午門診"]
+        ],
+        reviewsList: [
+          { author: "王小姐", text: "預約流程清楚，醫師說明檢查結果很仔細。", rating: 5 },
+          { author: "周先生", text: "候診時間比預期短，回診提醒也很方便。", rating: 4.8 }
+        ]
+      },
+      bright: {
+        name: "明曜眼科診所",
+        tag: "眼科",
+        rating: "4.8",
+        reviews: "96",
+        distance: "2.4 km",
+        address: "台北市忠孝東路四段 101 號",
+        cover: "https://images.unsplash.com/photo-1579684385127-1ef15d508118?auto=format&fit=crop&w=640&q=80",
+        about: "提供視力檢查、乾眼症照護、兒童視力追蹤與白內障諮詢。",
+        doctors: [
+          ["許庭瑋", "眼科 / 今日可預約"],
+          ["蔡宜真", "眼科 / 兒童視力"]
+        ],
+        reviewsList: [
+          { author: "林小姐", text: "檢查設備完整，護理人員會主動提醒流程。", rating: 5 },
+          { author: "張先生", text: "醫師對乾眼症照護給了很實用的建議。", rating: 4.7 }
+        ]
+      },
+      smile: {
+        name: "晴美牙醫診所",
+        tag: "牙科",
+        rating: "4.7",
+        reviews: "74",
+        distance: "3.1 km",
+        address: "台北市仁愛路三段 66 號",
+        cover: "https://images.unsplash.com/photo-1606811971618-4486d14f3f99?auto=format&fit=crop&w=640&q=80",
+        about: "整合洗牙、牙周照護、假牙諮詢與兒童口腔保健，重視舒適看診體驗。",
+        doctors: [
+          ["黃子軒", "牙科 / 洗牙與牙周"],
+          ["吳佳穎", "牙科 / 兒童口腔"]
+        ],
+        reviewsList: [
+          { author: "陳先生", text: "醫師會先說明每個步驟，洗牙過程安心很多。", rating: 4.9 },
+          { author: "劉小姐", text: "小朋友第一次看牙，診所引導得很有耐心。", rating: 4.8 }
+        ]
+      }
+    };
 
-    const baseHomeClinicIds = [];
+    const baseHomeClinicIds = ["healthy", "bright", "smile"];
 
     function showPage(target, options = {}) {
       const previousPage = currentPage || document.querySelector(".page.active")?.dataset.page || "home";
